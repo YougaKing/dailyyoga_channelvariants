@@ -1,0 +1,1 @@
+include ':app', ':productFlavorsBuildApk-gradle-plugin'
