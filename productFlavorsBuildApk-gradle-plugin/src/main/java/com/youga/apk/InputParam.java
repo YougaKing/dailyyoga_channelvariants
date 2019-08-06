@@ -86,4 +86,17 @@ public class InputParam {
             );
         }
     }
+
+    @Override
+    public String toString() {
+        return "InputParam{" +
+                "originApk=" + originApk +
+                ", originChannel=" + originChannel +
+                ", channelList=" + channelList +
+                ", signFile=" + signFile +
+                ", storePassword='" + storePassword + '\'' +
+                ", keyAlias='" + keyAlias + '\'' +
+                ", keyPassword='" + keyPassword + '\'' +
+                '}';
+    }
 }

@@ -128,10 +128,8 @@ class ProductFlavorsBuildApkTask extends DefaultTask {
             Map<String, Object> manifestPlaceholders = buildInfo.manifestPlaceholders
 
             boolean isExclude = isExcludeFlavor(flavorName)
-            println isExclude
 
             if (!isExclude) {
-                println "flavorName:" + flavorName + "-->manifestPlaceholders:" + manifestPlaceholders
                 channelList.add(Channel.create(flavorName, manifestPlaceholders))
             }
             if (flavorName.equalsIgnoreCase(configuration.originFlavor)) {

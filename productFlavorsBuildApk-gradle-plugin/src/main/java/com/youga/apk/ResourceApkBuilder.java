@@ -50,7 +50,13 @@ public class ResourceApkBuilder {
 
     private void insureFileNameV2() {
         mUnSignedApk = new File(mOutDir, mApkName);
-        String apkName = mApkName.replaceAll("unsigned", "signed");
+        String apkName;
+        if (mApkName.contains("unsigned")) {
+            apkName = mApkName.replaceAll("unsigned", "signed");
+        } else {
+            String prefixName = mApkName.substring(0, mApkName.indexOf(".apk"));
+            apkName = prefixName + "_signed.apk";
+        }
         mSignedApk = new File(mOutDir, apkName);
     }
 
@@ -116,6 +122,6 @@ public class ResourceApkBuilder {
     }
 
     private void copyFinalApkV2() throws IOException {
-        FileOperation.deleteFile(mUnSignedApk.getAbsolutePath());
+//        FileOperation.deleteFile(mUnSignedApk.getAbsolutePath());
     }
 }

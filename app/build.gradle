@@ -2,7 +2,7 @@ import com.android.build.gradle.api.ApplicationVariant
 
 apply plugin: 'com.android.application'
 apply plugin: 'productFlavorsBuildApk'
-apply from: 'and_res_guard.gradle'
+//apply from: 'and_res_guard.gradle'
 apply from: 'CollectTaskTimeListener.gradle'
 
 android {
@@ -192,7 +192,7 @@ android {
 productFlavorsBuildApk {
     originFlavor = "DailyYoga"
     excludeFlavor = ["oppo"]
-    andResGuard = true
+    andResGuard = false
 }
 
 dependencies {

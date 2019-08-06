@@ -14,6 +14,7 @@ public class Main {
     private File mOutDir;
 
     public static void gradleRun(InputParam inputParam) {
+        System.out.println(inputParam);
         Main main = new Main();
         main.run(inputParam);
     }
@@ -44,6 +45,7 @@ public class Main {
             ResourceApkBuilder builder = new ResourceApkBuilder(inputParam, channel, apkName);
             builder.setOutDir(mOutDir);
             builder.buildApkWithV2sign(decoder.getCompressData(), 14);
+            break;
         }
     }
 
@@ -57,9 +59,9 @@ public class Main {
     }
 
     private void deleteTempFile(InputParam inputParam) {
-        File tempOutDir = new File(mOutDir, FileOperation.UNZIP_FILE_PATH);
-        FileOperation.deleteDir(tempOutDir);
-        FileOperation.deleteFile(inputParam.originApk.getAbsolutePath());
+//        File tempOutDir = new File(mOutDir, FileOperation.UNZIP_FILE_PATH);
+//        FileOperation.deleteDir(tempOutDir);
+//        FileOperation.deleteFile(inputParam.originApk.getAbsolutePath());
     }
 
     private static String capitalize(CharSequence self) {
