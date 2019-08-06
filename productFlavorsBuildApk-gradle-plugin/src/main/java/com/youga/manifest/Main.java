@@ -45,7 +45,6 @@ public class Main {
             ResourceApkBuilder builder = new ResourceApkBuilder(inputParam, channel, apkName);
             builder.setOutDir(mOutDir);
             builder.buildApkWithV2sign(decoder.getCompressData(), 14);
-            break;
         }
     }
 
