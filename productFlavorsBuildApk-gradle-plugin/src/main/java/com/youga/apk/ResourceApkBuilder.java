@@ -122,6 +122,6 @@ public class ResourceApkBuilder {
     }
 
     private void copyFinalApkV2() throws IOException {
-//        FileOperation.deleteFile(mUnSignedApk.getAbsolutePath());
+        FileOperation.deleteFile(mUnSignedApk.getAbsolutePath());
     }
 }

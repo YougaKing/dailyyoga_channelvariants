@@ -59,9 +59,9 @@ public class Main {
     }
 
     private void deleteTempFile(InputParam inputParam) {
-//        File tempOutDir = new File(mOutDir, FileOperation.UNZIP_FILE_PATH);
-//        FileOperation.deleteDir(tempOutDir);
-//        FileOperation.deleteFile(inputParam.originApk.getAbsolutePath());
+        File tempOutDir = new File(mOutDir, FileOperation.UNZIP_FILE_PATH);
+        FileOperation.deleteDir(tempOutDir);
+        FileOperation.deleteFile(inputParam.originApk.getAbsolutePath());
     }
 
     private static String capitalize(CharSequence self) {
