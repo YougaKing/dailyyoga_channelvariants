@@ -5,23 +5,6 @@ apply from: 'CollectTaskTimeListener.gradle'
 
 android {
 
-    signingConfigs {
-        release {
-            Properties properties = new Properties()
-            InputStream inputStream = project.rootProject.file('local.properties').newDataInputStream()
-            properties.load(inputStream)
-            def storeFilePath = properties.getProperty('storeFile')
-            def keyAliasValue = properties.getProperty('keyAlias')
-            def keyPasswordValue = properties.getProperty('keyPassword')
-            def storePasswordValue = properties.getProperty('storePassword')
-
-            keyAlias keyAliasValue
-            keyPassword keyPasswordValue
-            storeFile file(storeFilePath)
-            storePassword storePasswordValue
-        }
-    }
-
     compileSdkVersion 29
     buildToolsVersion "29.0.1"
     defaultConfig {
@@ -48,11 +31,9 @@ android {
     buildTypes {
 
         debug {
-            signingConfig signingConfigs.release
         }
 
         release {
-            signingConfig signingConfigs.release
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
