@@ -1,5 +1,5 @@
 apply plugin: 'com.android.application'
-apply plugin: 'productFlavorsBuildApk'
+//apply plugin: 'productFlavorsBuildApk'
 //apply from: 'and_res_guard.gradle'
 apply from: 'CollectTaskTimeListener.gradle'
 
@@ -161,11 +161,11 @@ android {
     }
 }
 
-productFlavorsBuildApk {
-    originFlavor = "dailyYoga"
-    excludeFlavor = ["oppo"]
-    andResGuard = false
-}
+//productFlavorsBuildApk {
+//    originFlavor = "dailyYoga"
+//    excludeFlavor = ["oppo"]
+//    andResGuard = false
+//}
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
