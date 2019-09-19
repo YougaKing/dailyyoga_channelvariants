@@ -113,7 +113,7 @@ class ProductFlavorsBuildApkTask extends DefaultTask {
         File originApkDir = new File(parentDir.absolutePath + "/" + TASK_PREFIX)
         originApkDir.mkdirs()
         println "originApkDir:" + originApkDir.absolutePath
-        String originApkName = compileApk.name
+        String originApkName = compileApk.name.capitalize()
         println "originApkName:" + originApkName
         File originApk = new File(originApkDir.absolutePath, originApkName)
         println "originApk:" + originApk.absolutePath
