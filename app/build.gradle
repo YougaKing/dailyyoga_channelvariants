@@ -61,24 +61,24 @@ android {
 
     productFlavors {
 
-        DailyYoga {
+        dailyYoga {
             dimension "CHANNEL"
             manifestPlaceholders = [CHANNEL_NAME: "DailyYoga", CHANNEL_ID: "100001"]
         }
 
-        QiHu360 {
+        qiHu360 {
             dimension "CHANNEL"
             manifestPlaceholders = [CHANNEL_NAME: "QiHu360", CHANNEL_ID: "100002"]
         }
-        BaiDu {
+        baiDu {
             dimension "CHANNEL"
             manifestPlaceholders = [CHANNEL_NAME: "BaiDu", CHANNEL_ID: "100003"]
         }
-        Tencent {
+        tencent {
             dimension "CHANNEL"
             manifestPlaceholders = [CHANNEL_NAME: "Tencent", CHANNEL_ID: "100004"]
         }
-        PP {
+        pP {
             dimension "CHANNEL"
             manifestPlaceholders = [CHANNEL_NAME: "PP", CHANNEL_ID: "100006"]
         }
@@ -90,11 +90,11 @@ android {
             dimension "CHANNEL"
             manifestPlaceholders = [CHANNEL_NAME: "oppo", CHANNEL_ID: "100011"]
         }
-        SouGou {
+        souGou {
             dimension "CHANNEL"
             manifestPlaceholders = [CHANNEL_NAME: "SouGou", CHANNEL_ID: "100015"]
         }
-        MeiZu {
+        meiZu {
             dimension "CHANNEL"
             manifestPlaceholders = [CHANNEL_NAME: "MeiZu", CHANNEL_ID: "100016"]
         }
@@ -102,7 +102,7 @@ android {
             dimension "CHANNEL"
             manifestPlaceholders = [CHANNEL_NAME: "vivo", CHANNEL_ID: "100017"]
         }
-        Samsung {
+        samsung {
             dimension "CHANNEL"
             manifestPlaceholders = [CHANNEL_NAME: "Samsung", CHANNEL_ID: "100018"]
         }
@@ -110,35 +110,35 @@ android {
             dimension "CHANNEL"
             manifestPlaceholders = [CHANNEL_NAME: "huaWei", CHANNEL_ID: "100020"]
         }
-        Lenovo {
+        lenovo {
             dimension "CHANNEL"
             manifestPlaceholders = [CHANNEL_NAME: "Lenovo", CHANNEL_ID: "100021"]
         }
-        LittleChannel {
+        littleChannel {
             dimension "CHANNEL"
             manifestPlaceholders = [CHANNEL_NAME: "LittleChannel", CHANNEL_ID: "100039"]
         }
-        TencentCPD {
+        tencentCPD {
             dimension "CHANNEL"
             manifestPlaceholders = [CHANNEL_NAME: "TencentCPD", CHANNEL_ID: "100051"]
         }
-        Outside {
+        outside {
             dimension "CHANNEL"
             manifestPlaceholders = [CHANNEL_NAME: "Outside", CHANNEL_ID: "100052"]
         }
-        Outside2 {
+        outside2 {
             dimension "CHANNEL"
             manifestPlaceholders = [CHANNEL_NAME: "Outside2", CHANNEL_ID: "100053"]
         }
-        YogaMagazine {
+        yogaMagazine {
             dimension "CHANNEL"
             manifestPlaceholders = [CHANNEL_NAME: "YogaMagazine", CHANNEL_ID: "100055"]
         }
-        InivteFriend {
+        inivteFriend {
             dimension "CHANNEL"
             manifestPlaceholders = [CHANNEL_NAME: "InivteFriend", CHANNEL_ID: "100061"]
         }
-        BaoFengCPA {
+        baoFengCPA {
             dimension "CHANNEL"
             manifestPlaceholders = [CHANNEL_NAME: "BaoFengCPA", CHANNEL_ID: "100072"]
         }
@@ -146,7 +146,7 @@ android {
             dimension "CHANNEL"
             manifestPlaceholders = [CHANNEL_NAME: "brand2019", CHANNEL_ID: "100073"]
         }
-        DouyinOfficial {
+        douyinOfficial {
             dimension "CHANNEL"
             manifestPlaceholders = [CHANNEL_NAME: "DouyinOfficial", CHANNEL_ID: "100078"]
         }
@@ -162,7 +162,7 @@ android {
 }
 
 productFlavorsBuildApk {
-    originFlavor = "DailyYoga"
+    originFlavor = "dailyYoga"
     excludeFlavor = ["oppo"]
     andResGuard = false
 }
