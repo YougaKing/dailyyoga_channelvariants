@@ -1,5 +1,3 @@
-import com.android.build.gradle.api.ApplicationVariant
-
 apply plugin: 'com.android.application'
 apply plugin: 'productFlavorsBuildApk'
 //apply from: 'and_res_guard.gradle'
@@ -34,8 +32,18 @@ android {
         versionName "1.0.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
-        flavorDimensions "API", "CHANNEL"
+        flavorDimensions "CHANNEL"
         manifestPlaceholders = [CHANNEL_NAME: "DailyYoga", CHANNEL_ID: "100001"]
+
+        buildConfigField "boolean", "ONLINE", "true"
+        buildConfigField "String", "APP_URL", "\"https://o2o.dailyyoga.com.cn\""
+        buildConfigField "String", "GO_APP_URL", "\"https:api.dailyyoga.com.cn\""
+        buildConfigField "String", "BASE_APP_URL", "\"https://o2o.dailyyoga.com.cn/620\""
+        buildConfigField "String", "WEB_FLAG_URL", "\"https://www.dailyyoga.com.cn\""
+        buildConfigField "String", "UPLOAD_IMAGE_URL", "\"https://st.dailyyoga.com.cn/pic/upload.php\""
+        buildConfigField "String", "SHOP_YOGA_HOME", "\"https://shop.dailyyoga.com.cn/?#/?yg_page_type=home\""
+        buildConfigField "String", "SHOP_YOGA_COUPON", "\"https://shop.dailyyoga.com.cn/?#/couponList?yg_page_type=coupon\""
+        buildConfigField "String", "SHOP_YOGA_ORDER", "\"https://shop.dailyyoga.com.cn/?#/orderList?yg_page_type=order\""
     }
     buildTypes {
 
@@ -52,42 +60,6 @@ android {
 
 
     productFlavors {
-        Testing {
-            dimension "API"
-            buildConfigField "boolean", "ONLINE", "false"
-            buildConfigField "String", "APP_URL", "\"http://115.29.202.161:8090\""
-            buildConfigField "String", "GO_APP_URL", "\"http://115.29.202.161:28090\""
-            buildConfigField "String", "BASE_APP_URL", "\"http://115.29.202.161:8090/620_qa\""
-            buildConfigField "String", "WEB_FLAG_URL", "\"https://www.dailyyoga.com.cn\""
-            buildConfigField "String", "UPLOAD_IMAGE_URL", "\"https://st.dailyyoga.com.cn/pic/upload.php\""
-            buildConfigField "String", "SHOP_YOGA_HOME", "\"https://test.dailyyoga.com.cn/front_end_all/mall/?#/?yg_page_type=home\""
-            buildConfigField "String", "SHOP_YOGA_COUPON", "\"https://test.dailyyoga.com.cn/front_end_all/mall/?#/couponList?yg_page_type=coupon\""
-            buildConfigField "String", "SHOP_YOGA_ORDER", "\"https://test.dailyyoga.com.cn/front_end_all/mall/?#/orderList?yg_page_type=order\""
-        }
-        OnLine {
-            dimension "API"
-            buildConfigField "boolean", "ONLINE", "true"
-            buildConfigField "String", "APP_URL", "\"https://o2o.dailyyoga.com.cn\""
-            buildConfigField "String", "GO_APP_URL", "\"https:api.dailyyoga.com.cn\""
-            buildConfigField "String", "BASE_APP_URL", "\"https://o2o.dailyyoga.com.cn/620\""
-            buildConfigField "String", "WEB_FLAG_URL", "\"https://www.dailyyoga.com.cn\""
-            buildConfigField "String", "UPLOAD_IMAGE_URL", "\"https://st.dailyyoga.com.cn/pic/upload.php\""
-            buildConfigField "String", "SHOP_YOGA_HOME", "\"https://shop.dailyyoga.com.cn/?#/?yg_page_type=home\""
-            buildConfigField "String", "SHOP_YOGA_COUPON", "\"https://shop.dailyyoga.com.cn/?#/couponList?yg_page_type=coupon\""
-            buildConfigField "String", "SHOP_YOGA_ORDER", "\"https://shop.dailyyoga.com.cn/?#/orderList?yg_page_type=order\""
-        }
-        Mirror {
-            dimension "API"
-            buildConfigField "boolean", "ONLINE", "false"
-            buildConfigField "String", "APP_URL", "\"https://o2o.dailyyoga.com.cn\""
-            buildConfigField "String", "GO_APP_URL", "\"https:api.dailyyoga.com.cn/mirror\""
-            buildConfigField "String", "BASE_APP_URL", "\"https://o2o.dailyyoga.com.cn/620mirror\""
-            buildConfigField "String", "WEB_FLAG_URL", "\"https://www.dailyyoga.com.cn\""
-            buildConfigField "String", "UPLOAD_IMAGE_URL", "\"https://st.dailyyoga.com.cn/pic/upload.php\""
-            buildConfigField "String", "SHOP_YOGA_HOME", "\"https://shop.dailyyoga.com.cn/?#/?yg_page_type=home\""
-            buildConfigField "String", "SHOP_YOGA_COUPON", "\"https://shop.dailyyoga.com.cn/?#/couponList?yg_page_type=coupon\""
-            buildConfigField "String", "SHOP_YOGA_ORDER", "\"https://shop.dailyyoga.com.cn/?#/orderList?yg_page_type=order\""
-        }
 
         DailyYoga {
             dimension "CHANNEL"
@@ -180,8 +152,8 @@ android {
         }
     }
 
-    DomainObjectSet<ApplicationVariant> applicationVariants = android.applicationVariants
-    applicationVariants.all { ApplicationVariant variant ->
+    DomainObjectSet applicationVariants = android.applicationVariants
+    applicationVariants.all { variant ->
         variant.outputs.all {
             def channel = variant.mergedFlavor.manifestPlaceholders.get("CHANNEL_ID").toString().capitalize()
             outputFileName = "${variant.flavorName}_${channel}_${variant.buildType.name}_${defaultConfig.versionName}_${packTime()}.apk"
