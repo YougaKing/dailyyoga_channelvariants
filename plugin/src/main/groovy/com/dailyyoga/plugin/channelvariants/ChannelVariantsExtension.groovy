@@ -1,10 +1,12 @@
 package com.dailyyoga.plugin.channelvariants
 
-import com.dailyyoga.plugin.channelvariants.util.Logger
+
 import com.google.common.collect.Lists
+import com.dailyyoga.plugin.channelvariants.ChannelVariants.ChannelVariantsBuilder
 
 class ChannelVariantsExtension {
 
+    List<ChannelVariantsBuilder> channelVariantsBuilders = Lists.newArrayList()
     List<ChannelVariants> channelVariants = Lists.newArrayList()
 
     boolean enable = true
@@ -13,16 +15,24 @@ class ChannelVariantsExtension {
     boolean andResGuard
     boolean isFastMode = true
 
-    void config(String channel, boolean global, List<String> excludes) {
-        ChannelVariants object = ChannelVariants.create(channel, global, excludes)
-        Logger.error("object: ${object}")
-        channelVariants.add(object)
+    void configGlobal(String channel, String... variants) {
+        ChannelVariantsBuilder builder = ChannelVariants.createBuilder(channel, true, variants)
+        channelVariantsBuilders.add(builder)
     }
 
-    void config(String channel, List<String> variants) {
-        ChannelVariants object = ChannelVariants.create(channel, variants)
-        Logger.error("object: ${object}")
-        channelVariants.add(object)
+    void config(String channel, String... variants) {
+        ChannelVariantsBuilder builder = ChannelVariants.createBuilder(channel, false, variants)
+        channelVariantsBuilders.add(builder)
+    }
+
+    ChannelVariantsBuilder getChannelVariantsBuilder(String flavorName) {
+        ChannelVariantsBuilder result = null
+        channelVariantsBuilders.each { ChannelVariantsBuilder it ->
+            if (it.channel.equalsIgnoreCase(flavorName)) {
+                result = it
+            }
+        }
+        return result
     }
 
     @Override

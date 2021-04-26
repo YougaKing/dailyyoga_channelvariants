@@ -1,38 +1,58 @@
 package com.dailyyoga.plugin.channelvariants
 
+import com.android.build.gradle.api.ApplicationVariant
+import com.google.common.collect.Lists
+
 class ChannelVariants {
 
     String channel
-    List<String> variants
+    ApplicationVariant variant
+    List<String> channels
 
-    boolean global
-    List<String> excludes
-
-    ChannelVariants(String channel) {
-        this.channel = channel
+    static ChannelVariantsBuilder createBuilder(String channel,
+                                                boolean exclude,
+                                                String... channels) {
+        ChannelVariantsBuilder builder = new ChannelVariantsBuilder(channel)
+        builder.channels.addAll(channels)
+        builder.exclude = exclude
+        return builder
     }
 
-    static ChannelVariants create(String channel, boolean global, List<String> excludes) {
-        ChannelVariants channelVariants = new ChannelVariants(channel)
-        channelVariants.global = global
-        channelVariants.excludes = excludes
+    static ChannelVariants create(List<String> globalChannels,
+                                  ChannelVariantsBuilder builder,
+                                  ApplicationVariant variant) {
+        ChannelVariants channelVariants = new ChannelVariants()
+        channelVariants.channel = builder.channel
+        channelVariants.variant = variant
+
+        List<String> channels = new ArrayList<>(globalChannels)
+        if (builder.exclude) {
+            builder.channels.each {
+                channels.remove(it)
+            }
+            channelVariants.channels = channels
+        } else {
+            channelVariants.channels = builder.channels
+        }
         return channelVariants
     }
-
-    static ChannelVariants create(String channel, List<String> variants) {
-        ChannelVariants channelVariants = new ChannelVariants(channel)
-        channelVariants.variants = variants
-        return channelVariants
-    }
-
 
     @Override
     public String toString() {
         return "ChannelVariants{" +
                 "channel='" + channel + '\'' +
-                ", variants=" + variants +
-                ", global=" + global +
-                ", excludes=" + excludes +
+                ", channels=" + channels +
                 '}';
+    }
+
+
+    static class ChannelVariantsBuilder {
+        List<String> channels = Lists.newArrayList()
+        String channel
+        boolean exclude
+
+        ChannelVariantsBuilder(String channel) {
+            this.channel = channel
+        }
     }
 }

@@ -9,13 +9,8 @@ channelVariants {
     logDir file("${project.buildDir.absolutePath}/outputs/logs")
     andResGuard = false
     isFastMode = true
-    config("dailyYoga",
-            true,
-            ["vivo", "oppo", "huawei"]
-    )
-    config("huaWei",
-            ["huaWeiInfo", "huaWeiAi"]
-    )
+    configGlobal("dailyYoga", "vivo", "oppo", "xiaomi", "huawei", "huaWeiInfo", "huaWeiAi")
+    config("huaWei", "huaWeiInfo", "huaWeiAi")
 }
 
 android {
