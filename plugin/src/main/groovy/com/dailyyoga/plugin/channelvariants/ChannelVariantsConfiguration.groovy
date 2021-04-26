@@ -5,7 +5,7 @@ import com.android.builder.model.ProductFlavor
 class ChannelVariantsConfiguration {
 
     ChannelVariantsExtension extension
-    String channel
+    ProductFlavor flavor
     List<ProductFlavor> flavors
 
     ChannelVariantsConfiguration(ChannelVariantsExtension extension) {
@@ -15,8 +15,8 @@ class ChannelVariantsConfiguration {
     @Override
     public String toString() {
         return "ChannelVariantsConfiguration{" +
-                "channel='" + channel + '\'' +
-                ", flavors=" + flavors.size() +
+                "flavor='" + flavor + '\'' +
+                ", flavors=" + flavors +
                 '}';
     }
 

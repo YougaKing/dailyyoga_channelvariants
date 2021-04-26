@@ -1,5 +1,6 @@
 package com.dailyyoga.plugin.channelvariants
 
+import com.android.build.gradle.internal.api.ReadOnlyProductFlavor
 import com.android.builder.model.ProductFlavor
 import com.google.common.collect.Lists
 
@@ -33,7 +34,6 @@ class ChannelVariantsExtension {
         if (channels == null || channels.isEmpty()) return
 
         ChannelVariantsConfiguration configuration = new ChannelVariantsConfiguration(this)
-        configuration.channel = flavorName
 
         List<ProductFlavor> flavors = Lists.newArrayList()
         if (channels.contains(GLOBAL)) {
@@ -41,11 +41,17 @@ class ChannelVariantsExtension {
                 if (!channels.contains(flavor.name)) {
                     flavors.add(flavor)
                 }
+                if (flavorName.equalsIgnoreCase(flavor.name)) {
+                    configuration.flavor = flavor
+                }
             }
         } else {
             globalFlavors.each { ProductFlavor flavor ->
                 if (channels.contains(flavor.name)) {
                     flavors.add(flavor)
+                }
+                if (flavorName.equalsIgnoreCase(flavor.name)) {
+                    configuration.flavor = flavor
                 }
             }
         }

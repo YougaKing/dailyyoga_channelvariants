@@ -1,8 +1,8 @@
 package com.dailyyoga.plugin.channelvariants
 
 import com.android.build.gradle.api.ApplicationVariant
-import com.android.build.gradle.internal.api.ReadOnlySigningConfig
 import com.android.builder.model.ProductFlavor
+import com.android.builder.model.SigningConfig
 import com.dailyyoga.plugin.channelvariants.util.Logger
 import com.youga.apk.Channel
 import com.youga.apk.InputParam
@@ -21,12 +21,14 @@ class ChannelVariantsTask extends DefaultTask {
 
     @TaskAction
     public void run() {
-        def logLevel = extension.logLevel
-        def logDir = extension.logDir ?: project.file("${project.buildDir}/outputs/logs")
-        Logger.init(logLevel < 0 ? Logger.LEVEL_CONSOLE : logLevel, logDir, configuration.channel)
+        def logLevel = configuration.extension.logLevel
+        def logDir = configuration.extension.logDir ?: project.file("${project.buildDir}/outputs/logs")
+        Logger.init(logLevel < 0 ? Logger.LEVEL_CONSOLE : logLevel, logDir, configuration.flavor.name)
 
         File originApk = variant.outputs.first().outputFile
         Logger.info("originApk:" + originApk.absolutePath)
+
+        Channel originChannel = Channel.create(configuration.flavor.name, configuration.flavor.manifestPlaceholders)
 
         List<Channel> channelList = new ArrayList<>()
         configuration.flavors.each { ProductFlavor flavor ->
@@ -34,11 +36,11 @@ class ChannelVariantsTask extends DefaultTask {
             channelList.add(channel)
         }
 
-        ReadOnlySigningConfig apkSigningConfig = variant.variantData.variantConfiguration.signingConfig
+        SigningConfig apkSigningConfig = getSigningConfig()
 
         InputParam.Builder builder = new InputParam.Builder()
                 .setOriginApk(originApk)
-                .setOriginChannel(configuration.channel)
+                .setOriginChannel(originChannel)
                 .setChannelList(channelList)
                 .setSignFile(apkSigningConfig.storeFile)
                 .setStorePassword(apkSigningConfig.storePassword)
@@ -48,5 +50,27 @@ class ChannelVariantsTask extends DefaultTask {
         Main.gradleRun(builder.create())
     }
 
+    /**
+     * get the SigningConfig
+     * @return
+     */
+    SigningConfig getSigningConfig() {
+        //return variant.buildType.signingConfig == null ? variant.mergedFlavor.signingConfig : variant.buildType.signingConfig
+        SigningConfig config = null
+        if (variant.hasProperty("signingConfig") && variant.signingConfig != null) {
+            config = variant.signingConfig
+        } else if (variant.hasProperty("variantData") &&
+                variant.variantData.hasProperty("variantConfiguration") &&
+                variant.variantData.variantConfiguration.hasProperty("signingConfig") &&
+                variant.variantData.variantConfiguration.signingConfig != null) {
+            config = variant.variantData.variantConfiguration.signingConfig
+        } else if (variant.hasProperty("apkVariantData") &&
+                variant.apkVariantData.hasProperty("variantConfiguration") &&
+                variant.apkVariantData.variantConfiguration.hasProperty("signingConfig") &&
+                variant.apkVariantData.variantConfiguration.signingConfig != null) {
+            config = variant.apkVariantData.variantConfiguration.signingConfig
+        }
+        return config
+    }
 
 }
