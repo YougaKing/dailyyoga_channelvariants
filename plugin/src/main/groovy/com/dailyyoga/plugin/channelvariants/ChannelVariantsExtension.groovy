@@ -1,6 +1,6 @@
 package com.dailyyoga.plugin.channelvariants
 
-
+import com.android.builder.model.ProductFlavor
 import com.google.common.collect.Lists
 
 class ChannelVariantsExtension {
@@ -28,22 +28,28 @@ class ChannelVariantsExtension {
     }
 
     ChannelVariantsConfiguration getConfiguration(String flavorName,
-                                                  List<String> globalChannels) {
-        List<String> channelList = channelMap.get(flavorName)
-        if (channelList == null || channelList.isEmpty()) return
+                                                  List<ProductFlavor> globalFlavors) {
+        List<String> channels = channelMap.get(flavorName)
+        if (channels == null || channels.isEmpty()) return
 
         ChannelVariantsConfiguration configuration = new ChannelVariantsConfiguration(this)
         configuration.channel = flavorName
 
-        if (channelList.contains(GLOBAL)) {
-            List<String> channels = new ArrayList<>(globalChannels)
-            channelList.each {
-                channels.remove(it)
+        List<ProductFlavor> flavors = Lists.newArrayList()
+        if (channels.contains(GLOBAL)) {
+            globalFlavors.each { ProductFlavor flavor ->
+                if (!channels.contains(flavor.name)) {
+                    flavors.add(flavor)
+                }
             }
-            configuration.channels = channels
         } else {
-            configuration.channels = channelList
+            globalFlavors.each { ProductFlavor flavor ->
+                if (channels.contains(flavor.name)) {
+                    flavors.add(flavor)
+                }
+            }
         }
+        configuration.flavors = flavors
         return configuration
     }
 

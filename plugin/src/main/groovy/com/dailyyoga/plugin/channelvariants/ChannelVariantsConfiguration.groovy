@@ -1,10 +1,12 @@
 package com.dailyyoga.plugin.channelvariants
 
+import com.android.builder.model.ProductFlavor
+
 class ChannelVariantsConfiguration {
 
     ChannelVariantsExtension extension
     String channel
-    List<String> channels
+    List<ProductFlavor> flavors
 
     ChannelVariantsConfiguration(ChannelVariantsExtension extension) {
         this.extension = extension
@@ -14,7 +16,7 @@ class ChannelVariantsConfiguration {
     public String toString() {
         return "ChannelVariantsConfiguration{" +
                 "channel='" + channel + '\'' +
-                ", channels=" + channels +
+                ", flavors=" + flavors.size() +
                 '}';
     }
 

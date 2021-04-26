@@ -44,15 +44,15 @@ class ChannelVariantsPlugin implements Plugin<Project> {
 
         project.afterEvaluate {
 
-            List<String> globalChannels = Lists.newArrayList()
+            List<ProductFlavor> globalFlavors = Lists.newArrayList()
             android.productFlavors.all { ProductFlavor flavor ->
                 Logger.error("flavor: ${flavor.name}")
-                globalChannels.add(flavor.name)
+                globalFlavors.add(flavor)
             }
 
             android.applicationVariants.each { ApplicationVariant variant ->
                 ReadOnlyProductFlavor flavor = variant.productFlavors.get(0)
-                ChannelVariantsConfiguration configuration = extension.getConfiguration(flavor.name, globalChannels)
+                ChannelVariantsConfiguration configuration = extension.getConfiguration(flavor.name, globalFlavors)
                 if (configuration == null) return
                 Logger.error("configuration: ${configuration}")
                 createChannelVariantsTask(variant, configuration)
