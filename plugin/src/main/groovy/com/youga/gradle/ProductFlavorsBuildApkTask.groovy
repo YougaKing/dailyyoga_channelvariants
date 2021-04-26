@@ -3,7 +3,7 @@ package com.youga.gradle
 import com.android.build.gradle.AppExtension
 import com.android.build.gradle.internal.api.ApkVariantOutputImpl
 import com.android.build.gradle.internal.api.ApplicationVariantImpl
-import com.android.build.gradle.internal.dsl.CoreSigningConfig
+import com.android.build.gradle.internal.api.ReadOnlySigningConfig
 import com.android.build.gradle.internal.dsl.ProductFlavor
 import com.android.utils.FileUtils
 import com.youga.apk.Channel
@@ -23,7 +23,7 @@ class ProductFlavorsBuildApkTask extends DefaultTask {
     ProductFlavorsBuildApkExtension configuration
     File outputFile
     def buildInfoList = []
-    CoreSigningConfig apkSigningConfig
+    ReadOnlySigningConfig apkSigningConfig
     File parentDir
 
     ProductFlavorsBuildApkTask() {

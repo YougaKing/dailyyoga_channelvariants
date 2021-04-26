@@ -1,7 +1,22 @@
 apply plugin: 'com.android.application'
-apply plugin: 'productFlavorsBuildApk'
 //apply from: 'and_res_guard.gradle'
-apply from: 'CollectTaskTimeListener.gradle'
+//apply from: 'CollectTaskTimeListener.gradle'
+apply plugin: 'com.dailyyoga.plugin.channelvariants'
+
+channelVariants {
+    enable true
+    logLevel 3
+    logDir file("${project.buildDir.absolutePath}/outputs/logs")
+    andResGuard = false
+    isFastMode = true
+    config("dailyYoga",
+            true,
+            ["vivo", "oppo", "huawei"]
+    )
+    config("huaWei",
+            ["huaWeiInfo", "huaWeiAi"]
+    )
+}
 
 android {
 
@@ -91,6 +106,14 @@ android {
             dimension "CHANNEL"
             manifestPlaceholders = [CHANNEL_NAME: "huaWei", CHANNEL_ID: "100020"]
         }
+        huaWeiInfo {
+            dimension "CHANNEL"
+            manifestPlaceholders = [CHANNEL_NAME: "huaWei", CHANNEL_ID: "100020"]
+        }
+        huaWeiAi {
+            dimension "CHANNEL"
+            manifestPlaceholders = [CHANNEL_NAME: "huaWei", CHANNEL_ID: "100020"]
+        }
         lenovo {
             dimension "CHANNEL"
             manifestPlaceholders = [CHANNEL_NAME: "Lenovo", CHANNEL_ID: "100021"]
@@ -140,12 +163,6 @@ android {
             outputFileName = "${variant.flavorName}_${channel}_${variant.buildType.name}_${defaultConfig.versionName}_${packTime()}.apk"
         }
     }
-}
-
-productFlavorsBuildApk {
-    originFlavor = "dailyYoga"
-    excludeFlavor = ["oppo"]
-    andResGuard = false
 }
 
 dependencies {
