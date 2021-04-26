@@ -2,37 +2,49 @@ package com.dailyyoga.plugin.channelvariants
 
 
 import com.google.common.collect.Lists
-import com.dailyyoga.plugin.channelvariants.ChannelVariants.ChannelVariantsBuilder
 
 class ChannelVariantsExtension {
 
-    List<ChannelVariantsBuilder> channelVariantsBuilders = Lists.newArrayList()
-    List<ChannelVariants> channelVariants = Lists.newArrayList()
+    static final String GLOBAL = "*"
 
     boolean enable = true
     int logLevel
     File logDir
     boolean andResGuard
     boolean isFastMode = true
+    Map<String, List<String>> channelMap = new HashMap<>()
 
-    void configGlobal(String channel, String... variants) {
-        ChannelVariantsBuilder builder = ChannelVariants.createBuilder(channel, true, variants)
-        channelVariantsBuilders.add(builder)
+    void configGlobal(String channel, String... channels) {
+        List<String> channelList = Lists.newArrayList()
+        channelList.add(GLOBAL)
+        channelList.addAll(channels)
+        channelMap.put(channel, channelList)
     }
 
-    void config(String channel, String... variants) {
-        ChannelVariantsBuilder builder = ChannelVariants.createBuilder(channel, false, variants)
-        channelVariantsBuilders.add(builder)
+    void config(String channel, String... channels) {
+        List<String> channelList = Lists.newArrayList()
+        channelList.addAll(channels)
+        channelMap.put(channel, channelList)
     }
 
-    ChannelVariantsBuilder getChannelVariantsBuilder(String flavorName) {
-        ChannelVariantsBuilder result = null
-        channelVariantsBuilders.each { ChannelVariantsBuilder it ->
-            if (it.channel.equalsIgnoreCase(flavorName)) {
-                result = it
+    ChannelVariantsConfiguration getConfiguration(String flavorName,
+                                                  List<String> globalChannels) {
+        List<String> channelList = channelMap.get(flavorName)
+        if (channelList == null || channelList.isEmpty()) return
+
+        ChannelVariantsConfiguration configuration = new ChannelVariantsConfiguration(this)
+        configuration.channel = flavorName
+
+        if (channelList.contains(GLOBAL)) {
+            List<String> channels = new ArrayList<>(globalChannels)
+            channelList.each {
+                channels.remove(it)
             }
+            configuration.channels = channels
+        } else {
+            configuration.channels = channelList
         }
-        return result
+        return configuration
     }
 
     @Override
@@ -43,7 +55,7 @@ class ChannelVariantsExtension {
                 ", logDir=" + logDir +
                 ", andResGuard=" + andResGuard +
                 ", isFastMode=" + isFastMode +
-                ", channelVariants=" + channelVariants +
+                ", channelMap=" + channelMap +
                 '}';
     }
 }

@@ -4,7 +4,6 @@ import com.android.build.gradle.AppExtension
 import com.android.build.gradle.api.ApplicationVariant
 import com.android.build.gradle.internal.api.ReadOnlyProductFlavor
 import com.android.builder.model.ProductFlavor
-import com.dailyyoga.plugin.channelvariants.ChannelVariants.ChannelVariantsBuilder
 import com.dailyyoga.plugin.channelvariants.util.Logger
 import com.dailyyoga.plugin.channelvariants.util.Utils
 import com.google.common.collect.Lists
@@ -51,31 +50,24 @@ class ChannelVariantsPlugin implements Plugin<Project> {
                 globalChannels.add(flavor.name)
             }
 
-            android.productFlavors.all { ProductFlavor flavor ->
-
-            }
-
             android.applicationVariants.each { ApplicationVariant variant ->
-
                 ReadOnlyProductFlavor flavor = variant.productFlavors.get(0)
-                ChannelVariantsBuilder builder = extension.getChannelVariantsBuilder(flavor.name)
-                if (builder == null) return
-                ChannelVariants channelVariants = ChannelVariants.create(globalChannels, builder, variant)
-                Logger.error("channelVariants: ${channelVariants}")
-                extension.channelVariants.add(channelVariants)
-                createChannelVariantsTask(variant, channelVariants)
+                ChannelVariantsConfiguration configuration = extension.getConfiguration(flavor.name, globalChannels)
+                if (configuration == null) return
+                Logger.error("configuration: ${configuration}")
+                createChannelVariantsTask(variant, configuration)
             }
         }
     }
 
-    void createChannelVariantsTask(ApplicationVariant variant, ChannelVariants channelVariants) {
+    void createChannelVariantsTask(ApplicationVariant variant, ChannelVariantsConfiguration configuration) {
         def variantName = variant.name.capitalize()
         def channelVariantsTaskName = "channelVariants${variantName}"
 
         Logger.error("variantName: ${variantName} " + "channelVariantsTaskName: ${channelVariantsTaskName}")
         Task channelVariantsTask = project.task(channelVariantsTaskName, type: ChannelVariantsTask) {
             setVariant(variant)
-            setChannelVariants(channelVariants)
+            setConfiguration(configuration)
         }
 
         channelVariantsTask.dependsOn variant.assembleProvider.get()

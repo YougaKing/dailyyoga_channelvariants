@@ -11,11 +11,11 @@ import java.util.logging.LogRecord
 
 class Logger {
 
-    public static final String TAG = "ChannelVariants: "
+    public static final String TAG = "ChannelVariantsConfiguration: "
     public static final String LOG_FILE_PREFIX = "channelVariants-"
 
     private static java.util.logging.Logger sLogger =
-            java.util.logging.Logger.getLogger("ChannelVariants")
+            java.util.logging.Logger.getLogger("ChannelVariantsConfiguration")
 
     private static ExecutorService sExecutor
 

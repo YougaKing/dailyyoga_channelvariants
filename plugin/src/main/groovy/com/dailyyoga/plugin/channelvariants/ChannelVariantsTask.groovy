@@ -8,7 +8,7 @@ import org.gradle.api.tasks.TaskAction
 class ChannelVariantsTask extends DefaultTask {
 
     ApplicationVariant variant
-    ChannelVariants channelVariants
+    ChannelVariantsConfiguration configuration
 
     ChannelVariantsTask() {
         group = 'channelVariants'
@@ -18,7 +18,7 @@ class ChannelVariantsTask extends DefaultTask {
     public void run() {
         def logLevel = extension.logLevel
         def logDir = extension.logDir ?: project.file("${project.buildDir}/outputs/logs")
-        Logger.init(logLevel < 0 ? Logger.LEVEL_CONSOLE : logLevel, logDir, channelVariants.channel)
+        Logger.init(logLevel < 0 ? Logger.LEVEL_CONSOLE : logLevel, logDir, configuration.channel)
 
 
     }
