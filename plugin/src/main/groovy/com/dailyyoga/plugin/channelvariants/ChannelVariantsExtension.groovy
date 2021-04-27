@@ -1,11 +1,12 @@
 package com.dailyyoga.plugin.channelvariants
 
 import com.android.builder.model.ProductFlavor
+import com.dailyyoga.plugin.channelvariants.util.Logger
 import com.google.common.collect.Lists
 
 class ChannelVariantsExtension {
 
-    static final String SEPARATOR = "|"
+    static final String SEPARATOR = "\\|"
     static final String GLOBAL = "*"
     static final String EXCLUDE = "!"
 
@@ -15,7 +16,6 @@ class ChannelVariantsExtension {
     boolean andResGuard
     File apkDir
     Map<String, ExcludeInclude> channelMap = new HashMap<>()
-    boolean global
 
     // "*|!vivo|!huawei*|!oppo|!xiaomi"
     // "huawei*"
@@ -24,14 +24,15 @@ class ChannelVariantsExtension {
         String[] arrays = pattern.split(SEPARATOR)
         arrays.each {
             if (it == GLOBAL) {
-                global = true
+                excludeInclude.global = true
             } else if (it.startsWith(EXCLUDE)) {
-                excludeInclude.excludes.add(it)
+                excludeInclude.excludes.add(it.replaceAll(EXCLUDE, ""))
             } else {
                 excludeInclude.includes.add(it)
             }
         }
         channelMap.put(channel, excludeInclude)
+        Logger.error("channel: ${channel}" + ", excludeInclude: ${excludeInclude}")
     }
 
     ChannelVariantsConfiguration getConfiguration(String flavorName,
@@ -42,7 +43,7 @@ class ChannelVariantsExtension {
         ChannelVariantsConfiguration configuration = new ChannelVariantsConfiguration(this)
 
         List<ProductFlavor> flavors = Lists.newArrayList()
-        if (global) {
+        if (excludeInclude.global) {
             globalFlavors.each { ProductFlavor flavor ->
                 if (!excludeInclude.isExclude(flavor.name)) {
                     flavors.add(flavor)
@@ -53,7 +54,7 @@ class ChannelVariantsExtension {
             }
         } else {
             globalFlavors.each { ProductFlavor flavor ->
-                if (excludeInclude.includes.contains(flavor.name)) {
+                if (excludeInclude.isInclude(flavor.name)) {
                     flavors.add(flavor)
                 }
                 if (flavorName.equalsIgnoreCase(flavor.name)) {
@@ -78,6 +79,7 @@ class ChannelVariantsExtension {
     }
 
     static class ExcludeInclude {
+        boolean global
         List<String> excludes = Lists.newArrayList()
         List<String> includes = Lists.newArrayList()
 
@@ -94,6 +96,30 @@ class ChannelVariantsExtension {
                 }
             }
             return exclude
+        }
+
+        boolean isInclude(String flavorName) {
+            boolean include = false
+            includes.each {
+                if (it.endsWith(GLOBAL)) {
+                    def temp = it.replace(GLOBAL, "")
+                    if (flavorName.startsWith(temp)) {
+                        include = true
+                    }
+                } else if (it == flavorName) {
+                    include = true
+                }
+            }
+            return include
+        }
+
+        @Override
+        public String toString() {
+            return "ExcludeInclude{" +
+                    "global=" + global +
+                    ", excludes=" + excludes +
+                    ", includes=" + includes +
+                    '}';
         }
     }
 }
