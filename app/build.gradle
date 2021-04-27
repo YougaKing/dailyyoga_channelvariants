@@ -8,7 +8,7 @@ channelVariants {
     logLevel 3
     logDir file("${project.buildDir.absolutePath}/outputs/logs")
     andResGuard = false
-    logDir file("${project.buildDir.absolutePath}/1.0.0")
+    apkDir file("${project.rootDir.absolutePath}/1.0.0")
     config("dailyYoga", "*|!vivo|!huawei*|!oppo|!xiaomi")
     config("huaWei", "huawei*")
 }

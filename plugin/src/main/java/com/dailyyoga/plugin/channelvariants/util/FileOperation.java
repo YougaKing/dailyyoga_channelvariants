@@ -47,12 +47,16 @@ public class FileOperation {
         return true;
     }
 
-    public static boolean checkDirectory(File dir) {
-        deleteDir(dir);
+    public static boolean mkdirs(File dir) {
         if (!dir.exists()) {
-            dir.mkdirs();
+            return dir.mkdirs();
         }
         return true;
+    }
+
+    public static boolean checkDirectory(File dir) {
+        deleteDir(dir);
+        return mkdirs(dir);
     }
 
     public static HashMap<String, Integer> unZipAPk(File apkFile,
