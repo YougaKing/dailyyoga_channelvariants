@@ -1,17 +1,17 @@
 apply plugin: 'com.android.application'
 //apply from: 'and_res_guard.gradle'
 //apply from: 'CollectTaskTimeListener.gradle'
-apply plugin: 'com.dailyyoga.plugin.channelvariants'
-
-channelVariants {
-    enable true
-    logLevel 3
-    logDir file("${project.buildDir.absolutePath}/outputs/logs")
-    andResGuard = false
-    apkDir file("${project.rootDir.absolutePath}/1.0.0")
-    config("dailyYoga", "*|!vivo|!huawei*|!oppo|!xiaomi")
-    config("huaWei", "huawei*")
-}
+//apply plugin: 'com.dailyyoga.plugin.channelvariants'
+//
+//channelVariants {
+//    enable true
+//    logLevel 3
+//    logDir file("${project.buildDir.absolutePath}/outputs/logs")
+//    andResGuard = false
+//    apkDir file("${project.rootDir.absolutePath}/1.0.0")
+//    config("dailyYoga", "*|!vivo|!huawei*|!oppo|!xiaomi")
+//    config("huaWei", "huawei*")
+//}
 
 android {
 
