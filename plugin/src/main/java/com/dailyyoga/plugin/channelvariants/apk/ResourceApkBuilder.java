@@ -61,9 +61,14 @@ public class ResourceApkBuilder {
             String prefixName = apkName.substring(0, apkName.indexOf(".apk"));
             finalApkName = prefixName + "_signed.apk";
         }
-        File dir = inputParam.outApkDir == null ? parentFile : inputParam.outApkDir;
-        FileOperation.mkdirs(dir);
-        FileUtils.copyFileToDirectory(inputParam.originApk, dir);
+        File dir;
+        if (inputParam.outApkDir == null) {
+            dir = parentFile;
+        } else {
+            dir = inputParam.outApkDir;
+            FileOperation.mkdirs(dir);
+            FileUtils.copyFileToDirectory(inputParam.originApk, dir);
+        }
         signedApk = new File(dir, finalApkName);
     }
 

@@ -28,7 +28,7 @@ class ChannelVariantsTask extends DefaultTask {
         File originApk = variant.outputs.first().outputFile
         Logger.info("originApk:" + originApk.absolutePath)
         File outApkDir = configuration.extension.apkDir == null ? null : new File((configuration.extension.apkDir.absolutePath + "/" + variant.buildType.name))
-        Logger.info("outApkDir:" + outApkDir == null ? "null" : outApkDir.absolutePath)
+        Logger.info("outApkDir:" + (outApkDir == null ? "null" : outApkDir.absolutePath))
 
         Channel originChannel = Channel.create(configuration.flavor.name, configuration.flavor.manifestPlaceholders)
 
