@@ -5,6 +5,8 @@ import com.dailyyoga.plugin.channelvariants.manifest.ChannelEditor;
 import com.dailyyoga.plugin.channelvariants.manifest.decode.AXMLDoc;
 import com.dailyyoga.plugin.channelvariants.util.FileOperation;
 
+import org.apache.commons.io.FileUtils;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -48,7 +50,7 @@ public class ResourceApkBuilder {
         deleteUnSignApkFile();
     }
 
-    private void generalApkFile() {
+    private void generalApkFile() throws IOException {
         File parentFile = inputParam.originApk.getParentFile();
         unSignedApk = new File(parentFile, apkName);
 
@@ -61,6 +63,7 @@ public class ResourceApkBuilder {
         }
         File dir = inputParam.outApkDir == null ? parentFile : inputParam.outApkDir;
         FileOperation.mkdirs(dir);
+        FileUtils.copyFileToDirectory(inputParam.originApk, dir);
         signedApk = new File(dir, finalApkName);
     }
 

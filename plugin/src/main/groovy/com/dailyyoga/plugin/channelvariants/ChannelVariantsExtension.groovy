@@ -43,22 +43,18 @@ class ChannelVariantsExtension {
         ChannelVariantsConfiguration configuration = new ChannelVariantsConfiguration(this)
 
         List<ProductFlavor> flavors = Lists.newArrayList()
-        if (excludeInclude.global) {
-            globalFlavors.each { ProductFlavor flavor ->
-                if (!excludeInclude.isExclude(flavor.name)) {
-                    flavors.add(flavor)
-                }
-                if (flavorName.equalsIgnoreCase(flavor.name)) {
-                    configuration.flavor = flavor
-                }
-            }
-        } else {
-            globalFlavors.each { ProductFlavor flavor ->
-                if (excludeInclude.isInclude(flavor.name)) {
-                    flavors.add(flavor)
-                }
-                if (flavorName.equalsIgnoreCase(flavor.name)) {
-                    configuration.flavor = flavor
+        globalFlavors.each { ProductFlavor flavor ->
+            if (flavorName.equalsIgnoreCase(flavor.name)) {
+                configuration.flavor = flavor
+            } else {
+                if (excludeInclude.global) {
+                    if (!excludeInclude.isExclude(flavor.name)) {
+                        flavors.add(flavor)
+                    }
+                } else {
+                    if (excludeInclude.isInclude(flavor.name)) {
+                        flavors.add(flavor)
+                    }
                 }
             }
         }
