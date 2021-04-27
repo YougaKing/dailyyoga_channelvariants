@@ -20,6 +20,7 @@ class ChannelVariantsTask extends DefaultTask {
 
     @TaskAction
     public void run() {
+        def start = System.currentTimeMillis()
         def logLevel = configuration.extension.logLevel
         def logDir = configuration.extension.logDir ?: project.file("${project.buildDir}/outputs/logs")
         Logger.init(logLevel < 0 ? Logger.LEVEL_CONSOLE : logLevel, logDir, configuration.flavor.name)
@@ -50,6 +51,12 @@ class ChannelVariantsTask extends DefaultTask {
                 .setKeyPassword(apkSigningConfig.keyPassword)
 
         Main.gradleRun(builder.create())
+
+        Logger.debug("ChannelVariantsTask end, " +
+                "sign apks:${channelList.size()}, " +
+                "time use:${System.currentTimeMillis() - start} ms")
+
+        Logger.close()
     }
 
     /**

@@ -53,7 +53,6 @@ class ChannelVariantsPlugin implements Plugin<Project> {
                 ReadOnlyProductFlavor flavor = variant.productFlavors.get(0)
                 ChannelVariantsConfiguration configuration = extension.getConfiguration(flavor.name, globalFlavors)
                 if (configuration == null) return
-                Logger.error("configuration: ${configuration}")
                 createChannelVariantsTask(variant, configuration)
             }
         }
@@ -63,7 +62,6 @@ class ChannelVariantsPlugin implements Plugin<Project> {
         def variantName = variant.name.capitalize()
         def channelVariantsTaskName = "channelVariants${variantName}"
 
-        Logger.error("variantName: ${variantName}" + ", channelVariantsTaskName: ${channelVariantsTaskName}")
         Task channelVariantsTask = project.task(channelVariantsTaskName, type: ChannelVariantsTask) {
             setVariant(variant)
             setConfiguration(configuration)
