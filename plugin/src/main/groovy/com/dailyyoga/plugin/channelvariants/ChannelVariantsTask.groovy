@@ -4,9 +4,8 @@ import com.android.build.gradle.api.ApplicationVariant
 import com.android.builder.model.ProductFlavor
 import com.android.builder.model.SigningConfig
 import com.dailyyoga.plugin.channelvariants.util.Logger
-import com.youga.apk.Channel
-import com.youga.apk.InputParam
-import com.youga.manifest.Main
+import com.dailyyoga.plugin.channelvariants.apk.Channel
+import com.dailyyoga.plugin.channelvariants.apk.InputParam
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
 
