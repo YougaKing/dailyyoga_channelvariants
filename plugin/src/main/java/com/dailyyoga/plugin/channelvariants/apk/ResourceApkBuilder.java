@@ -59,7 +59,7 @@ public class ResourceApkBuilder {
             String prefixName = apkName.substring(0, apkName.indexOf(".apk"));
             finalApkName = prefixName + "_signed.apk";
         }
-        signedApk = new File(parentFile, finalApkName);
+        signedApk = new File(inputParam.outApkDir == null ? parentFile : inputParam.outApkDir, finalApkName);
     }
 
     private void writeChannel() throws Exception {

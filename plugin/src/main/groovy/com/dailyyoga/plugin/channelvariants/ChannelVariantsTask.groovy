@@ -39,6 +39,7 @@ class ChannelVariantsTask extends DefaultTask {
 
         InputParam.Builder builder = new InputParam.Builder()
                 .setOriginApk(originApk)
+                .setOutApkDir(configuration.extension.apkDir)
                 .setOriginChannel(originChannel)
                 .setChannelList(channelList)
                 .setSignFile(apkSigningConfig.storeFile)

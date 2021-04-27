@@ -1,44 +1,50 @@
 package com.dailyyoga.plugin.channelvariants
 
-import com.android.build.gradle.internal.api.ReadOnlyProductFlavor
 import com.android.builder.model.ProductFlavor
 import com.google.common.collect.Lists
 
 class ChannelVariantsExtension {
 
+    static final String SEPARATOR = "|"
     static final String GLOBAL = "*"
+    static final String EXCLUDE = "!"
 
     boolean enable = true
     int logLevel
     File logDir
     boolean andResGuard
-    boolean isFastMode = true
-    Map<String, List<String>> channelMap = new HashMap<>()
+    File apkDir
+    Map<String, ExcludeInclude> channelMap = new HashMap<>()
+    boolean global
 
-    void configGlobal(String channel, String... channels) {
-        List<String> channelList = Lists.newArrayList()
-        channelList.add(GLOBAL)
-        channelList.addAll(channels)
-        channelMap.put(channel, channelList)
-    }
-
-    void config(String channel, String... channels) {
-        List<String> channelList = Lists.newArrayList()
-        channelList.addAll(channels)
-        channelMap.put(channel, channelList)
+    // "*|!vivo|!huawei*|!oppo|!xiaomi"
+    // "huawei*"
+    void config(String channel, String pattern) {
+        ExcludeInclude excludeInclude = new ExcludeInclude()
+        String[] arrays = pattern.split(SEPARATOR)
+        arrays.each {
+            if (it == GLOBAL) {
+                global = true
+            } else if (it.startsWith(EXCLUDE)) {
+                excludeInclude.excludes.add(it)
+            } else {
+                excludeInclude.includes.add(it)
+            }
+        }
+        channelMap.put(channel, excludeInclude)
     }
 
     ChannelVariantsConfiguration getConfiguration(String flavorName,
                                                   List<ProductFlavor> globalFlavors) {
-        List<String> channels = channelMap.get(flavorName)
-        if (channels == null || channels.isEmpty()) return
+        ExcludeInclude excludeInclude = channelMap.get(flavorName)
+        if (excludeInclude == null) return
 
         ChannelVariantsConfiguration configuration = new ChannelVariantsConfiguration(this)
 
         List<ProductFlavor> flavors = Lists.newArrayList()
-        if (channels.contains(GLOBAL)) {
+        if (global) {
             globalFlavors.each { ProductFlavor flavor ->
-                if (!channels.contains(flavor.name)) {
+                if (!excludeInclude.isExclude(flavor.name)) {
                     flavors.add(flavor)
                 }
                 if (flavorName.equalsIgnoreCase(flavor.name)) {
@@ -47,7 +53,7 @@ class ChannelVariantsExtension {
             }
         } else {
             globalFlavors.each { ProductFlavor flavor ->
-                if (channels.contains(flavor.name)) {
+                if (excludeInclude.includes.contains(flavor.name)) {
                     flavors.add(flavor)
                 }
                 if (flavorName.equalsIgnoreCase(flavor.name)) {
@@ -69,5 +75,25 @@ class ChannelVariantsExtension {
                 ", isFastMode=" + isFastMode +
                 ", channelMap=" + channelMap +
                 '}';
+    }
+
+    static class ExcludeInclude {
+        List<String> excludes = Lists.newArrayList()
+        List<String> includes = Lists.newArrayList()
+
+        boolean isExclude(String flavorName) {
+            boolean exclude = false
+            excludes.each {
+                if (it.endsWith(GLOBAL)) {
+                    def temp = it.replace(GLOBAL, "")
+                    if (flavorName.startsWith(temp)) {
+                        exclude = true
+                    }
+                } else if (it == flavorName) {
+                    exclude = true
+                }
+            }
+            return exclude
+        }
     }
 }

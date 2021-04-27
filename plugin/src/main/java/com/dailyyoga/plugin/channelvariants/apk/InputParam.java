@@ -11,6 +11,7 @@ import java.util.List;
 public class InputParam {
 
     public final File originApk;
+    public final File outApkDir;
     public final Channel originChannel;
     public final List<Channel> channelList;
     public final File signFile;
@@ -18,9 +19,10 @@ public class InputParam {
     public final String keyAlias;
     public final String keyPassword;
 
-    public InputParam(File originApk, Channel originChannel, List<Channel> channelList,
+    public InputParam(File originApk, File outApkDir, Channel originChannel, List<Channel> channelList,
                       File signFile, String keyPassword, String keyAlias, String storePassword) {
         this.originApk = originApk;
+        this.outApkDir = outApkDir;
         this.originChannel = originChannel;
         this.channelList = channelList;
         this.signFile = signFile;
@@ -32,6 +34,7 @@ public class InputParam {
 
     public static class Builder {
         private File originApk;
+        private File outApkDir;
         private Channel originChannel;
         private List<Channel> channelList;
         private File signFile;
@@ -41,6 +44,11 @@ public class InputParam {
 
         public Builder setOriginApk(File originApk) {
             this.originApk = originApk;
+            return this;
+        }
+
+        public Builder setOutApkDir(File outApkDir) {
+            this.outApkDir = outApkDir;
             return this;
         }
 
@@ -77,6 +85,7 @@ public class InputParam {
         public InputParam create() {
             return new InputParam(
                     originApk,
+                    outApkDir,
                     originChannel,
                     channelList,
                     signFile,

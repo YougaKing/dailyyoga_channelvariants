@@ -46,7 +46,6 @@ class ChannelVariantsPlugin implements Plugin<Project> {
 
             List<ProductFlavor> globalFlavors = Lists.newArrayList()
             android.productFlavors.all { ProductFlavor flavor ->
-                Logger.error("flavor: ${flavor.name}")
                 globalFlavors.add(flavor)
             }
 
@@ -54,7 +53,6 @@ class ChannelVariantsPlugin implements Plugin<Project> {
                 ReadOnlyProductFlavor flavor = variant.productFlavors.get(0)
                 ChannelVariantsConfiguration configuration = extension.getConfiguration(flavor.name, globalFlavors)
                 if (configuration == null) return
-                Logger.error("configuration: ${configuration}")
                 createChannelVariantsTask(variant, configuration)
             }
         }
