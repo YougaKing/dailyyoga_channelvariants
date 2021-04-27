@@ -87,9 +87,8 @@ class ChannelVariantsExtension {
             boolean exclude = false
             excludes.each {
                 if (it.endsWith(GLOBAL)) {
-                    Logger.error("it: ${it}" + ", flavorName: ${flavorName}")
                     def temp = it.replace(GLOBAL, "")
-                    if (flavorName.toLowerCase().startsWith(temp.toUpperCase())) {
+                    if (flavorName.toLowerCase().startsWith(temp.toLowerCase())) {
                         exclude = true
                     }
                 } else if (it.equalsIgnoreCase(flavorName)) {
@@ -104,7 +103,7 @@ class ChannelVariantsExtension {
             includes.each {
                 if (it.endsWith(GLOBAL)) {
                     def temp = it.replace(GLOBAL, "")
-                    if (flavorName.toLowerCase().startsWith(temp.toUpperCase())) {
+                    if (flavorName.toLowerCase().startsWith(temp.toLowerCase())) {
                         include = true
                     }
                 } else if (it.equalsIgnoreCase(flavorName)) {
