@@ -45,8 +45,7 @@ class ChannelVariantsPlugin implements Plugin<Project> {
         }
 
         project.afterEvaluate {
-            Logger.error("extension${extension}")
-
+            Logger.error("extension: ${extension}")
 
             List<ProductFlavor> globalFlavors = Lists.newArrayList()
             android.productFlavors.all { ProductFlavor flavor ->
@@ -66,7 +65,8 @@ class ChannelVariantsPlugin implements Plugin<Project> {
 
             if (fileVariant != null) {
                 extension.fileMap.each { key, value ->
-                    ChannelVariantsConfiguration configuration = ChannelVariantsConfiguration.createByFile(extension, key, value)
+                    ChannelVariantsConfiguration configuration = ChannelVariantsConfiguration.createByFile(extension, key, globalFlavors)
+                    Logger.error("configuration: ${configuration}")
                     if (configuration == null) return
                     createFileChannelVariantsTask(fileVariant, key, configuration)
                 }
@@ -86,14 +86,14 @@ class ChannelVariantsPlugin implements Plugin<Project> {
         channelVariantsTask.dependsOn variant.assembleProvider.get()
     }
 
-    void createFileChannelVariantsTask(ApplicationVariant variant, File apkFile, ChannelVariantsConfiguration configuration) {
-        def variantName = apkFile.name.replaceAll(".apk", "").replaceAll("_", "")
-        def channelVariantsTaskName = "channelVariantsFile${variantName}" + buildType
+    void createFileChannelVariantsTask(ApplicationVariant variant, String apkFilePath, ChannelVariantsConfiguration configuration) {
+        def variantName = apkFilePath.replaceAll(".apk", "").replaceAll("_", "")
+        def channelVariantsTaskName = "channelVariantsFile${variantName}"
 
         project.task(channelVariantsTaskName, type: FileChannelVariantsTask) {
             setVariant(variant)
             setConfiguration(configuration)
-            setApkFile(apkFile)
+            setApkFilePath(apkFilePath)
         }
     }
 }

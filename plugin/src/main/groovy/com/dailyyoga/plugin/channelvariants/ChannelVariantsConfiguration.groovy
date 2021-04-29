@@ -3,6 +3,7 @@ package com.dailyyoga.plugin.channelvariants
 import com.android.builder.model.ProductFlavor
 import com.dailyyoga.plugin.channelvariants.ChannelVariantsExtension.ExcludeInclude
 import com.dailyyoga.plugin.channelvariants.apk.Channel
+import com.dailyyoga.plugin.channelvariants.util.Logger
 import com.google.common.collect.Lists
 
 class ChannelVariantsConfiguration {
@@ -26,6 +27,27 @@ class ChannelVariantsConfiguration {
         if (excludeInclude == null) return
 
         ChannelVariantsConfiguration configuration = new ChannelVariantsConfiguration(extension)
+        dispose(configuration, excludeInclude, flavorName, globalFlavors)
+
+        return configuration.available() ? configuration : null
+    }
+
+    static ChannelVariantsConfiguration createByFile(ChannelVariantsExtension extension,
+                                                     String apkFilePath,
+                                                     List<ProductFlavor> globalFlavors) {
+        ExcludeInclude excludeInclude = extension.fileMap.get(apkFilePath)
+        if (excludeInclude == null) return
+
+        ChannelVariantsConfiguration configuration = new ChannelVariantsConfiguration(extension)
+        dispose(configuration, excludeInclude, "", globalFlavors)
+
+        return configuration.available() ? configuration : null
+    }
+
+    static void dispose(ChannelVariantsConfiguration configuration,
+                        ExcludeInclude excludeInclude,
+                        String flavorName,
+                        List<ProductFlavor> globalFlavors) {
         globalFlavors.each { ProductFlavor flavor ->
             if (flavorName.equalsIgnoreCase(flavor.name)) {
                 configuration.originChannel = transform(flavor)
@@ -41,17 +63,6 @@ class ChannelVariantsConfiguration {
                 }
             }
         }
-
-        return configuration.available() ? configuration : null
-    }
-
-    static ChannelVariantsConfiguration createByFile(ChannelVariantsExtension extension,
-                                                     File apkFile,
-                                                     List<ProductFlavor> globalFlavors) {
-        ExcludeInclude excludeInclude = extension.fileMap.get(apkFile)
-        if (excludeInclude == null) return
-
-        return create(excludeInclude, null, globalFlavors)
     }
 
     static Channel transform(ProductFlavor flavor) {

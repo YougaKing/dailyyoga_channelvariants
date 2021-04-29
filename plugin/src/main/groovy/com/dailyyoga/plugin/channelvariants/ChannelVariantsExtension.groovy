@@ -16,7 +16,7 @@ class ChannelVariantsExtension {
     boolean andResGuard
     File apkDir
     Map<String, ExcludeInclude> channelMap = new HashMap<>()
-    Map<File, ExcludeInclude> fileMap = new HashMap<>()
+    Map<String, ExcludeInclude> fileMap = new HashMap<>()
     SigningConfigProperties signingConfig
 
     // ("dailyYoga", "*|!vivo|!huawei*|!oppo|!xiaomi")
@@ -40,7 +40,8 @@ class ChannelVariantsExtension {
         if (!file.exists()) return
         if (signingConfig == null) return
         ExcludeInclude excludeInclude = createExcludeInclude(pattern)
-        fileMap.put(file, excludeInclude)
+        fileMap.put(file.getAbsolutePath(), excludeInclude)
+        Logger.error("file: ${file.getAbsolutePath()}" + ", excludeInclude: ${excludeInclude}")
     }
 
     static ExcludeInclude createExcludeInclude(String pattern) {
@@ -67,6 +68,7 @@ class ChannelVariantsExtension {
                 ", andResGuard=" + andResGuard +
                 ", \napkDir=" + apkDir +
                 ", \nchannelMap=" + channelMap +
+                ", \nfileMap=" + fileMap +
                 '}';
     }
 
