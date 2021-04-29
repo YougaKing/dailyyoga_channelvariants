@@ -10,8 +10,24 @@ channelVariants {
     andResGuard = false
     config("dailyYoga", "*|!vivo|!huawei*|!oppo|!xiaomi")
     config("huaWei", "huawei*")
+
+    Properties properties = signingConfigProperties()
+    signingConfig(
+            file(properties.getProperty('storeFile')),
+            properties.getProperty('storePassword'),
+            properties.getProperty('keyAlias'),
+            properties.getProperty('storePassword')
+    )
+
     configFile("/Users/youga/StudioProjects/android_h2/dailyyoga/yoga_h2/build/outputs/apk/8.10.0.0/release/dailyYoga_100001_release_8.10.0.0_20210427.apk", "Lenovo:100021|LittleChannel:100039")
     configFile("/Users/youga/StudioProjects/android_h2/dailyyoga/yoga_h2/build/outputs/apk/8.10.0.0/release/dailyYoga_100001_debug_8.10.0.0_20210427.apk", "Lenovo:100021|LittleChannel:100039")
+}
+
+Properties signingConfigProperties() {
+    Properties properties = new Properties()
+    InputStream inputStream = project.rootProject.file('local.properties').newDataInputStream()
+    properties.load(inputStream)
+    return properties
 }
 
 android {

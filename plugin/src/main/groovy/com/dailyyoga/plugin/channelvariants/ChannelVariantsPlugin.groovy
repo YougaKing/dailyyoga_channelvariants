@@ -47,22 +47,29 @@ class ChannelVariantsPlugin implements Plugin<Project> {
         project.afterEvaluate {
             Logger.error("extension${extension}")
 
-            extension.fileMap.each { key, value ->
-                ChannelVariantsConfiguration configuration = ChannelVariantsConfiguration.createByFile(extension, key, value)
-                if (configuration == null) return
-                createFileChannelVariantsTask(key, configuration)
-            }
 
             List<ProductFlavor> globalFlavors = Lists.newArrayList()
             android.productFlavors.all { ProductFlavor flavor ->
                 globalFlavors.add(flavor)
             }
 
+            ApplicationVariant fileVariant
             android.applicationVariants.each { ApplicationVariant variant ->
+                if (variant.buildType.name.equalsIgnoreCase("Release")) {
+                    fileVariant = variant
+                }
                 ReadOnlyProductFlavor flavor = variant.productFlavors.get(0)
                 ChannelVariantsConfiguration configuration = ChannelVariantsConfiguration.create(extension, flavor.name, globalFlavors)
                 if (configuration == null) return
                 createChannelVariantsTask(variant, configuration)
+            }
+
+            if (fileVariant != null) {
+                extension.fileMap.each { key, value ->
+                    ChannelVariantsConfiguration configuration = ChannelVariantsConfiguration.createByFile(extension, key, value)
+                    if (configuration == null) return
+                    createFileChannelVariantsTask(fileVariant, key, configuration)
+                }
             }
         }
     }
@@ -79,15 +86,16 @@ class ChannelVariantsPlugin implements Plugin<Project> {
         channelVariantsTask.dependsOn variant.assembleProvider.get()
     }
 
-    void createFileChannelVariantsTask(String filePath, ChannelVariantsConfiguration configuration) {
+    void createFileChannelVariantsTask(ApplicationVariant variant, String filePath, ChannelVariantsConfiguration configuration) {
         def buildType = filePath.contains("_release") ? "Release" : "Debug"
 
         def variantName = configuration.originChannel.capitalize()
         def channelVariantsTaskName = "channelVariantsFile${variantName}" + buildType
 
         project.task(channelVariantsTaskName, type: FileChannelVariantsTask) {
-            setFilePath(filePath)
+            setVariant(variant)
             setConfiguration(configuration)
+            setFilePath(filePath)
         }
     }
 }

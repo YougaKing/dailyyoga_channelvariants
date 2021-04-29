@@ -1,6 +1,6 @@
 package com.dailyyoga.plugin.channelvariants
 
-
+import com.dailyyoga.plugin.channelvariants.signer.SigningConfigProperties
 import com.dailyyoga.plugin.channelvariants.util.Logger
 import com.google.common.collect.Lists
 
@@ -17,6 +17,7 @@ class ChannelVariantsExtension {
     File apkDir
     Map<String, ExcludeInclude> channelMap = new HashMap<>()
     Map<String, List<String>> fileMap = new HashMap<>()
+    SigningConfigProperties signingConfig
 
     // ("dailyYoga", "*|!vivo|!huawei*|!oppo|!xiaomi")
     // ("huaWei", "huawei*")
@@ -36,8 +37,17 @@ class ChannelVariantsExtension {
         Logger.error("channel: ${channel}" + ", excludeInclude: ${excludeInclude}")
     }
 
+    void signingConfig(File storeFile, String storePassword, String keyAlias, String keyPassword) {
+        signingConfig = new SigningConfigProperties()
+        signingConfig.setStoreFile(storeFile)
+        signingConfig.setStorePassword(storePassword)
+        signingConfig.setKeyAlias(keyAlias)
+        signingConfig.setKeyPassword(keyPassword)
+    }
+
     //("/Users/youga/Downloads/baiDu_100003_release_8.10.0.0_20210427_signed.apk", "Lenovo:100021|LittleChannel:100039")
     void configFile(String filePath, String pattern) {
+        if (signingConfig == null) return
         List<String> channels = Lists.newArrayList()
         String[] arrays = pattern.split(SEPARATOR)
         channels.addAll(arrays)

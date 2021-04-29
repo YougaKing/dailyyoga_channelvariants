@@ -1,10 +1,9 @@
 package com.dailyyoga.plugin.channelvariants
 
 import com.android.builder.model.ProductFlavor
-import com.dailyyoga.plugin.channelvariants.apk.Channel
-import com.dailyyoga.plugin.channelvariants.util.Logger
-import com.google.common.collect.Lists
 import com.dailyyoga.plugin.channelvariants.ChannelVariantsExtension.ExcludeInclude
+import com.dailyyoga.plugin.channelvariants.apk.Channel
+import com.google.common.collect.Lists
 import org.apache.http.util.TextUtils
 
 class ChannelVariantsConfiguration {

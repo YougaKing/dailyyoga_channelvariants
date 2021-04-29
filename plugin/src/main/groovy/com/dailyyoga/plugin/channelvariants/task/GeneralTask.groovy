@@ -1,15 +1,17 @@
 package com.dailyyoga.plugin.channelvariants.task
 
-import com.android.builder.model.SigningConfig
+import com.android.build.gradle.api.ApplicationVariant
 import com.dailyyoga.plugin.channelvariants.ChannelVariantsConfiguration
 import com.dailyyoga.plugin.channelvariants.Main
 import com.dailyyoga.plugin.channelvariants.apk.InputParam
+import com.dailyyoga.plugin.channelvariants.signer.SigningConfigProperties
 import com.dailyyoga.plugin.channelvariants.util.Logger
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
 
 abstract class GeneralTask extends DefaultTask {
 
+    ApplicationVariant variant
     ChannelVariantsConfiguration configuration
 
     GeneralTask() {
@@ -17,8 +19,14 @@ abstract class GeneralTask extends DefaultTask {
     }
 
     File outApkDir() {
-        return configuration.extension.apkDir
+        if (configuration.extension.apkDir != null) {
+            return new File((configuration.extension.apkDir.absolutePath + "/" + variant.buildType.name))
+        } else {
+            return configuration.extension.apkDir
+        }
     }
+
+    abstract SigningConfigProperties signingConfig()
 
     abstract File originApkFile()
 
@@ -37,10 +45,10 @@ abstract class GeneralTask extends DefaultTask {
         Logger.info("originApkFile:" + originApkFile.absolutePath)
 
 
-        SigningConfig apkSigningConfig = getSigningConfig()
+        SigningConfigProperties apkSigningConfig = signingConfig()
 
         InputParam.Builder builder = new InputParam.Builder()
-                .setOriginApk(originApk)
+                .setOriginApk(originApkFile)
                 .setOutApkDir(outApkDir)
                 .setOriginChannel(configuration.originChannel)
                 .setChannelList(configuration.channelList)
@@ -52,33 +60,11 @@ abstract class GeneralTask extends DefaultTask {
         Main.gradleRun(builder.create())
 
         Logger.debug(getName() + " end, " +
-                "sign apks:${channelList.size()}, " +
+                "sign apks:${configuration.channelList.size()}, " +
                 "time use:${System.currentTimeMillis() - start} ms")
 
         Logger.close()
     }
 
 
-    /**
-     * get the SigningConfig
-     * @return
-     */
-    SigningConfig getSigningConfig() {
-        //return variant.buildType.signingConfig == null ? variant.mergedFlavor.signingConfig : variant.buildType.signingConfig
-        SigningConfig config = null
-        if (variant.hasProperty("signingConfig") && variant.signingConfig != null) {
-            config = variant.signingConfig
-        } else if (variant.hasProperty("variantData") &&
-                variant.variantData.hasProperty("variantConfiguration") &&
-                variant.variantData.variantConfiguration.hasProperty("signingConfig") &&
-                variant.variantData.variantConfiguration.signingConfig != null) {
-            config = variant.variantData.variantConfiguration.signingConfig
-        } else if (variant.hasProperty("apkVariantData") &&
-                variant.apkVariantData.hasProperty("variantConfiguration") &&
-                variant.apkVariantData.variantConfiguration.hasProperty("signingConfig") &&
-                variant.apkVariantData.variantConfiguration.signingConfig != null) {
-            config = variant.apkVariantData.variantConfiguration.signingConfig
-        }
-        return config
-    }
 }
