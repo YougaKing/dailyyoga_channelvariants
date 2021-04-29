@@ -1,5 +1,6 @@
 package com.dailyyoga.plugin.channelvariants
 
+import com.android.build.api.artifact.ArtifactKind
 import com.android.build.gradle.AppExtension
 import com.android.build.gradle.api.ApplicationVariant
 import com.android.build.gradle.internal.api.ReadOnlyProductFlavor
@@ -86,14 +87,14 @@ class ChannelVariantsPlugin implements Plugin<Project> {
         channelVariantsTask.dependsOn variant.assembleProvider.get()
     }
 
-    void createFileChannelVariantsTask(ApplicationVariant variant, String apkFilePath, ChannelVariantsConfiguration configuration) {
-        def variantName = apkFilePath.replaceAll(".apk", "").replaceAll("_", "")
+    void createFileChannelVariantsTask(ApplicationVariant variant, File apkFile, ChannelVariantsConfiguration configuration) {
+        def variantName = apkFile.name.replaceAll(".apk", "").replaceAll("_", "")
         def channelVariantsTaskName = "channelVariantsFile${variantName}"
 
         project.task(channelVariantsTaskName, type: FileChannelVariantsTask) {
             setVariant(variant)
             setConfiguration(configuration)
-            setApkFilePath(apkFilePath)
+            setApkFile(apkFile)
         }
     }
 }

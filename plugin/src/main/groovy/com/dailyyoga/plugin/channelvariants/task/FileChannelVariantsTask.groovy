@@ -4,7 +4,7 @@ import com.dailyyoga.plugin.channelvariants.signer.SigningConfigProperties
 
 class FileChannelVariantsTask extends GeneralTask {
 
-    String apkFilePath
+    File apkFile
 
     @Override
     SigningConfigProperties signingConfig() {
@@ -13,6 +13,6 @@ class FileChannelVariantsTask extends GeneralTask {
 
     @Override
     File originApkFile() {
-        return new File(apkFilePath)
+        return apkFile
     }
 }

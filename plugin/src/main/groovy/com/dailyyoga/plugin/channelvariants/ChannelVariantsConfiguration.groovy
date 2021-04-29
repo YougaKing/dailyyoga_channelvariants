@@ -33,9 +33,9 @@ class ChannelVariantsConfiguration {
     }
 
     static ChannelVariantsConfiguration createByFile(ChannelVariantsExtension extension,
-                                                     String apkFilePath,
+                                                     File apkFile,
                                                      List<ProductFlavor> globalFlavors) {
-        ExcludeInclude excludeInclude = extension.fileMap.get(apkFilePath)
+        ExcludeInclude excludeInclude = extension.fileMap.get(apkFile)
         if (excludeInclude == null) return
 
         ChannelVariantsConfiguration configuration = new ChannelVariantsConfiguration(extension)
