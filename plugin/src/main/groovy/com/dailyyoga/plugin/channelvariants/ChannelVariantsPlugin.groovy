@@ -11,6 +11,8 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.ProjectConfigurationException
 import org.gradle.api.Task
+import com.dailyyoga.plugin.channelvariants.task.ChannelVariantsTask
+import com.dailyyoga.plugin.channelvariants.task.FileChannelVariantsTask
 
 class ChannelVariantsPlugin implements Plugin<Project> {
 
@@ -42,6 +44,12 @@ class ChannelVariantsPlugin implements Plugin<Project> {
             return
         }
 
+        extension.fileMap.each { key, value ->
+            ChannelVariantsConfiguration configuration = ChannelVariantsConfiguration.create(extension, key, value)
+            if (configuration == null) return
+            createFileChannelVariantsTask(key, configuration)
+        }
+
         project.afterEvaluate {
 
             List<ProductFlavor> globalFlavors = Lists.newArrayList()
@@ -51,7 +59,7 @@ class ChannelVariantsPlugin implements Plugin<Project> {
 
             android.applicationVariants.each { ApplicationVariant variant ->
                 ReadOnlyProductFlavor flavor = variant.productFlavors.get(0)
-                ChannelVariantsConfiguration configuration = extension.getConfiguration(flavor.name, globalFlavors)
+                ChannelVariantsConfiguration configuration = ChannelVariantsConfiguration.create(extension, flavor.name, globalFlavors)
                 if (configuration == null) return
                 createChannelVariantsTask(variant, configuration)
             }
@@ -59,7 +67,7 @@ class ChannelVariantsPlugin implements Plugin<Project> {
     }
 
     void createChannelVariantsTask(ApplicationVariant variant, ChannelVariantsConfiguration configuration) {
-        def variantName = variant.name.capitalize()
+        def variantName = configuration.originChannel.capitalize()
         def channelVariantsTaskName = "channelVariants${variantName}"
 
         Task channelVariantsTask = project.task(channelVariantsTaskName, type: ChannelVariantsTask) {
@@ -68,5 +76,15 @@ class ChannelVariantsPlugin implements Plugin<Project> {
         }
 
         channelVariantsTask.dependsOn variant.assembleProvider.get()
+    }
+
+    void createFileChannelVariantsTask(String filePath, ChannelVariantsConfiguration configuration) {
+        def variantName = configuration.originChannel.capitalize()
+        def channelVariantsTaskName = "channelVariants${variantName}"
+
+        project.task(channelVariantsTaskName, type: FileChannelVariantsTask) {
+            setFilePath(filePath)
+            setConfiguration(configuration)
+        }
     }
 }

@@ -1,6 +1,6 @@
 package com.dailyyoga.plugin.channelvariants
 
-import com.android.builder.model.ProductFlavor
+
 import com.dailyyoga.plugin.channelvariants.util.Logger
 import com.google.common.collect.Lists
 
@@ -16,9 +16,10 @@ class ChannelVariantsExtension {
     boolean andResGuard
     File apkDir
     Map<String, ExcludeInclude> channelMap = new HashMap<>()
+    Map<String, List<String>> fileMap = new HashMap<>()
 
-    // "*|!vivo|!huawei*|!oppo|!xiaomi"
-    // "huawei*"
+    // ("dailyYoga", "*|!vivo|!huawei*|!oppo|!xiaomi")
+    // ("huaWei", "huawei*")
     void config(String channel, String pattern) {
         ExcludeInclude excludeInclude = new ExcludeInclude()
         String[] arrays = pattern.split(SEPARATOR)
@@ -35,31 +36,13 @@ class ChannelVariantsExtension {
         Logger.error("channel: ${channel}" + ", excludeInclude: ${excludeInclude}")
     }
 
-    ChannelVariantsConfiguration getConfiguration(String flavorName,
-                                                  List<ProductFlavor> globalFlavors) {
-        ExcludeInclude excludeInclude = channelMap.get(flavorName)
-        if (excludeInclude == null) return
-
-        ChannelVariantsConfiguration configuration = new ChannelVariantsConfiguration(this)
-
-        List<ProductFlavor> flavors = Lists.newArrayList()
-        globalFlavors.each { ProductFlavor flavor ->
-            if (flavorName.equalsIgnoreCase(flavor.name)) {
-                configuration.flavor = flavor
-            } else {
-                if (excludeInclude.global) {
-                    if (!excludeInclude.isExclude(flavor.name)) {
-                        flavors.add(flavor)
-                    }
-                } else {
-                    if (excludeInclude.isInclude(flavor.name)) {
-                        flavors.add(flavor)
-                    }
-                }
-            }
-        }
-        configuration.flavors = flavors
-        return configuration
+    //("/Users/youga/Downloads/baiDu_100003_release_8.10.0.0_20210427_signed.apk", "Lenovo:100021|LittleChannel:100039")
+    void configFile(String filePath, String pattern) {
+        List<String> channels = Lists.newArrayList()
+        String[] arrays = pattern.split(SEPARATOR)
+        channels.addAll(arrays)
+        fileMap.put(filePath, channels)
+        Logger.error("filePath: ${filePath}" + ", channels: ${channels}")
     }
 
     @Override
@@ -71,6 +54,7 @@ class ChannelVariantsExtension {
                 ", andResGuard=" + andResGuard +
                 ", isFastMode=" + isFastMode +
                 ", channelMap=" + channelMap +
+                ", fileMap=" + fileMap +
                 '}';
     }
 

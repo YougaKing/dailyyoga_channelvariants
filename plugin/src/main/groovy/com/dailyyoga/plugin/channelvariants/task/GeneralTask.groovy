@@ -1,50 +1,49 @@
-package com.dailyyoga.plugin.channelvariants
+package com.dailyyoga.plugin.channelvariants.task
 
-import com.android.build.gradle.api.ApplicationVariant
-import com.android.builder.model.ProductFlavor
 import com.android.builder.model.SigningConfig
-import com.dailyyoga.plugin.channelvariants.util.Logger
-import com.dailyyoga.plugin.channelvariants.apk.Channel
+import com.dailyyoga.plugin.channelvariants.ChannelVariantsConfiguration
+import com.dailyyoga.plugin.channelvariants.Main
 import com.dailyyoga.plugin.channelvariants.apk.InputParam
+import com.dailyyoga.plugin.channelvariants.util.Logger
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
 
-class ChannelVariantsTask extends DefaultTask {
+abstract class GeneralTask extends DefaultTask {
 
-    ApplicationVariant variant
     ChannelVariantsConfiguration configuration
 
-    ChannelVariantsTask() {
+    GeneralTask() {
         group = 'channelVariants'
     }
+
+    File outApkDir() {
+        return configuration.extension.apkDir
+    }
+
+    abstract File originApkFile()
 
     @TaskAction
     public void run() {
         def start = System.currentTimeMillis()
+
         def logLevel = configuration.extension.logLevel
         def logDir = configuration.extension.logDir ?: project.file("${project.buildDir}/outputs/logs")
-        Logger.init(logLevel < 0 ? Logger.LEVEL_CONSOLE : logLevel, logDir, configuration.flavor.name)
+        Logger.init(logLevel < 0 ? Logger.LEVEL_CONSOLE : logLevel, logDir, getName())
 
-        File originApk = variant.outputs.first().outputFile
-        Logger.info("originApk:" + originApk.absolutePath)
-        File outApkDir = configuration.extension.apkDir == null ? null : new File((configuration.extension.apkDir.absolutePath + "/" + variant.buildType.name))
+
+        File outApkDir = outApkDir()
         Logger.info("outApkDir:" + (outApkDir == null ? "null" : outApkDir.absolutePath))
+        File originApkFile = originApkFile()
+        Logger.info("originApkFile:" + originApkFile.absolutePath)
 
-        Channel originChannel = Channel.create(configuration.flavor.name, configuration.flavor.manifestPlaceholders)
-
-        List<Channel> channelList = new ArrayList<>()
-        configuration.flavors.each { ProductFlavor flavor ->
-            Channel channel = Channel.create(flavor.name, flavor.manifestPlaceholders)
-            channelList.add(channel)
-        }
 
         SigningConfig apkSigningConfig = getSigningConfig()
 
         InputParam.Builder builder = new InputParam.Builder()
                 .setOriginApk(originApk)
                 .setOutApkDir(outApkDir)
-                .setOriginChannel(originChannel)
-                .setChannelList(channelList)
+                .setOriginChannel(configuration.originChannel)
+                .setChannelList(configuration.channelList)
                 .setSignFile(apkSigningConfig.storeFile)
                 .setStorePassword(apkSigningConfig.storePassword)
                 .setKeyAlias(apkSigningConfig.keyAlias)
@@ -52,12 +51,13 @@ class ChannelVariantsTask extends DefaultTask {
 
         Main.gradleRun(builder.create())
 
-        Logger.debug("ChannelVariantsTask end, " +
+        Logger.debug(getName() + " end, " +
                 "sign apks:${channelList.size()}, " +
                 "time use:${System.currentTimeMillis() - start} ms")
 
         Logger.close()
     }
+
 
     /**
      * get the SigningConfig
@@ -81,5 +81,4 @@ class ChannelVariantsTask extends DefaultTask {
         }
         return config
     }
-
 }
