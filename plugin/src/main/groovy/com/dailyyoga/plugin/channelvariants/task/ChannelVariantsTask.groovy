@@ -18,7 +18,7 @@ class ChannelVariantsTask extends GeneralTask {
         properties.setStorePassword(signingConfig.storePassword)
         properties.setKeyAlias(signingConfig.keyAlias)
         properties.setKeyPassword(signingConfig.keyPassword)
-        return null
+        return properties
     }
 
     /**

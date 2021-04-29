@@ -46,7 +46,6 @@ class ChannelVariantsPlugin implements Plugin<Project> {
         }
 
         project.afterEvaluate {
-            Logger.error("extension: ${extension}")
 
             List<ProductFlavor> globalFlavors = Lists.newArrayList()
             android.productFlavors.all { ProductFlavor flavor ->
