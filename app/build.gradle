@@ -1,29 +1,29 @@
 apply plugin: 'com.android.application'
 //apply from: 'and_res_guard.gradle'
 //apply from: 'CollectTaskTimeListener.gradle'
-apply plugin: 'com.dailyyoga.plugin.channelvariants'
-
-channelVariants {
-    enable true
-    logLevel 3
-    logDir file("${project.buildDir.absolutePath}/outputs/logs")
-    andResGuard = false
-    config("dailyYoga", "*|!vivo|!huawei*|!oppo|!xiaomi")
-    config("huaWei", "huawei*")
-
-    Properties properties = signingConfigProperties()
-    signingConfig(
-            file(properties.getProperty('storeFile')),
-            properties.getProperty('storePassword'),
-            properties.getProperty('keyAlias'),
-            properties.getProperty('storePassword')
-    )
-
-    config(
-            file("/Users/youga/StudioProjects/android_h2/dailyyoga/yoga_h2/build/outputs/apk/8.10.0.0/release/tencent_100004_release_8.10.0.0_20210427_signed.apk"),
-            "Lenovo|LittleChannel"
-    )
-}
+//apply plugin: 'com.dailyyoga.plugin.channelvariants'
+//
+//channelVariants {
+//    enable true
+//    logLevel 3
+//    logDir file("${project.buildDir.absolutePath}/outputs/logs")
+//    andResGuard = false
+//    config("dailyYoga", "*|!vivo|!huawei*|!oppo|!xiaomi")
+//    config("huaWei", "huawei*")
+//
+//    Properties properties = signingConfigProperties()
+//    signingConfig(
+//            file(properties.getProperty('storeFile')),
+//            properties.getProperty('storePassword'),
+//            properties.getProperty('keyAlias'),
+//            properties.getProperty('storePassword')
+//    )
+//
+//    config(
+//            file("/Users/youga/StudioProjects/android_h2/dailyyoga/yoga_h2/build/outputs/apk/8.10.0.0/release/tencent_100004_release_8.10.0.0_20210427_signed.apk"),
+//            "Lenovo|LittleChannel"
+//    )
+//}
 
 Properties signingConfigProperties() {
     Properties properties = new Properties()
