@@ -75,7 +75,7 @@ class ChannelVariantsPlugin implements Plugin<Project> {
     }
 
     void createChannelVariantsTask(ApplicationVariant variant, ChannelVariantsConfiguration configuration) {
-        def variantName = configuration.originChannel.capitalize()
+        def variantName = configuration.originChannel.name.capitalize()
         def channelVariantsTaskName = "channelVariants${variantName}" + variant.buildType.name
 
         Task channelVariantsTask = project.task(channelVariantsTaskName, type: ChannelVariantsTask) {
@@ -86,16 +86,14 @@ class ChannelVariantsPlugin implements Plugin<Project> {
         channelVariantsTask.dependsOn variant.assembleProvider.get()
     }
 
-    void createFileChannelVariantsTask(ApplicationVariant variant, String filePath, ChannelVariantsConfiguration configuration) {
-        def buildType = filePath.contains("_release") ? "Release" : "Debug"
-
-        def variantName = configuration.originChannel.capitalize()
+    void createFileChannelVariantsTask(ApplicationVariant variant, File apkFile, ChannelVariantsConfiguration configuration) {
+        def variantName = apkFile.name.replaceAll(".apk", "").replaceAll("_", "")
         def channelVariantsTaskName = "channelVariantsFile${variantName}" + buildType
 
         project.task(channelVariantsTaskName, type: FileChannelVariantsTask) {
             setVariant(variant)
             setConfiguration(configuration)
-            setFilePath(filePath)
+            setApkFile(apkFile)
         }
     }
 }

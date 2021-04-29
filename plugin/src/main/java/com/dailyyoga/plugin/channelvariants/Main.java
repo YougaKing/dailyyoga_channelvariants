@@ -37,9 +37,9 @@ public class Main {
         }
     }
 
-    private String generalApkName(File originApk, String originChannel, Channel channel) {
+    private String generalApkName(File originApk, Channel originChannel, Channel channel) {
         String originApkName = originApk.getName();
-        originApkName = originApkName.replaceAll("(?i)" + originChannel, channel.name);
+        originApkName = originApkName.replaceAll("(?i)" + originChannel.name, channel.name);
         for (String key : channel.manifestPlaceholders.keySet()) {
             String value = channel.manifestPlaceholders.get(key);
             originApkName = originApkName.replaceAll(value, channel.manifestPlaceholders.get(key));

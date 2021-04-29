@@ -19,8 +19,10 @@ channelVariants {
             properties.getProperty('storePassword')
     )
 
-    configFile("/Users/youga/StudioProjects/android_h2/dailyyoga/yoga_h2/build/outputs/apk/8.10.0.0/release/dailyYoga_100001_release_8.10.0.0_20210427.apk", "Lenovo:100021|LittleChannel:100039")
-    configFile("/Users/youga/StudioProjects/android_h2/dailyyoga/yoga_h2/build/outputs/apk/8.10.0.0/release/dailyYoga_100001_debug_8.10.0.0_20210427.apk", "Lenovo:100021|LittleChannel:100039")
+    config(
+            file("/Users/youga/StudioProjects/android_h2/dailyyoga/yoga_h2/build/outputs/apk/8.10.0.0/release/tencent_100004_release_8.10.0.0_20210427_signed.apk"),
+            "Lenovo|LittleChannel"
+    )
 }
 
 Properties signingConfigProperties() {

@@ -12,14 +12,14 @@ public class InputParam {
 
     public final File originApk;
     public final File outApkDir;
-    public final String originChannel;
+    public final Channel originChannel;
     public final List<Channel> channelList;
     public final File signFile;
     public final String storePassword;
     public final String keyAlias;
     public final String keyPassword;
 
-    public InputParam(File originApk, File outApkDir, String originChannel, List<Channel> channelList,
+    public InputParam(File originApk, File outApkDir, Channel originChannel, List<Channel> channelList,
                       File signFile, String keyPassword, String keyAlias, String storePassword) {
         this.originApk = originApk;
         this.outApkDir = outApkDir;
@@ -35,7 +35,7 @@ public class InputParam {
     public static class Builder {
         private File originApk;
         private File outApkDir;
-        private String originChannel;
+        private Channel originChannel;
         private List<Channel> channelList;
         private File signFile;
         private String keyPassword;
@@ -52,7 +52,7 @@ public class InputParam {
             return this;
         }
 
-        public Builder setOriginChannel(String originChannel) {
+        public Builder setOriginChannel(Channel originChannel) {
             this.originChannel = originChannel;
             return this;
         }

@@ -16,23 +16,13 @@ class ChannelVariantsExtension {
     boolean andResGuard
     File apkDir
     Map<String, ExcludeInclude> channelMap = new HashMap<>()
-    Map<String, List<String>> fileMap = new HashMap<>()
+    Map<File, ExcludeInclude> fileMap = new HashMap<>()
     SigningConfigProperties signingConfig
 
     // ("dailyYoga", "*|!vivo|!huawei*|!oppo|!xiaomi")
     // ("huaWei", "huawei*")
     void config(String channel, String pattern) {
-        ExcludeInclude excludeInclude = new ExcludeInclude()
-        String[] arrays = pattern.split(SEPARATOR)
-        arrays.each {
-            if (it == GLOBAL) {
-                excludeInclude.global = true
-            } else if (it.startsWith(EXCLUDE)) {
-                excludeInclude.excludes.add(it.replaceAll(EXCLUDE, ""))
-            } else {
-                excludeInclude.includes.add(it)
-            }
-        }
+        ExcludeInclude excludeInclude = createExcludeInclude(pattern)
         channelMap.put(channel, excludeInclude)
         Logger.error("channel: ${channel}" + ", excludeInclude: ${excludeInclude}")
     }
@@ -45,14 +35,27 @@ class ChannelVariantsExtension {
         signingConfig.setKeyPassword(keyPassword)
     }
 
-    //("/Users/youga/Downloads/baiDu_100003_release_8.10.0.0_20210427_signed.apk", "Lenovo:100021|LittleChannel:100039")
-    void configFile(String filePath, String pattern) {
+    //("/Users/youga/Downloads/baiDu_100003_release_8.10.0.0_20210427_signed.apk", "...)
+    void config(File file, String pattern) {
+        if (!file.exists()) return
         if (signingConfig == null) return
-        List<String> channels = Lists.newArrayList()
+        ExcludeInclude excludeInclude = createExcludeInclude(pattern)
+        fileMap.put(file, excludeInclude)
+    }
+
+    static ExcludeInclude createExcludeInclude(String pattern) {
+        ExcludeInclude excludeInclude = new ExcludeInclude()
         String[] arrays = pattern.split(SEPARATOR)
-        channels.addAll(arrays)
-        fileMap.put(filePath, channels)
-        Logger.error("filePath: ${filePath}" + ", channels: ${channels}")
+        arrays.each {
+            if (it == GLOBAL) {
+                excludeInclude.global = true
+            } else if (it.startsWith(EXCLUDE)) {
+                excludeInclude.excludes.add(it.replaceAll(EXCLUDE, ""))
+            } else {
+                excludeInclude.includes.add(it)
+            }
+        }
+        return excludeInclude
     }
 
     @Override
@@ -64,7 +67,6 @@ class ChannelVariantsExtension {
                 ", andResGuard=" + andResGuard +
                 ", \napkDir=" + apkDir +
                 ", \nchannelMap=" + channelMap +
-                ", \nfileMap=" + fileMap +
                 '}';
     }
 
