@@ -39,7 +39,6 @@ public class ResourceApkBuilder {
         this.channel = channel;
         this.apkName = apkName;
         this.decoder = decoder;
-
     }
 
     public void buildApkWithV2sign(HashMap<String, Integer> compressData, int minSDKVersion) throws Exception {
@@ -52,15 +51,11 @@ public class ResourceApkBuilder {
 
     private void generalApkFile() throws IOException {
         File parentFile = inputParam.originApk.getParentFile();
-        unSignedApk = new File(parentFile, apkName);
 
-        String finalApkName;
-        if (apkName.contains("unsigned")) {
-            finalApkName = apkName.replaceAll("unsigned", "signed");
-        } else {
-            String prefixName = apkName.substring(0, apkName.indexOf(".apk"));
-            finalApkName = prefixName + "_signed.apk";
-        }
+        String prefixName = apkName.substring(0, apkName.indexOf(".apk"));
+        String unSignedApkName = prefixName + "_signed.apk";
+        unSignedApk = new File(parentFile, unSignedApkName);
+
         File dir;
         if (inputParam.outApkDir == null) {
             dir = parentFile;
@@ -69,7 +64,7 @@ public class ResourceApkBuilder {
             FileOperation.mkdirs(dir);
             FileUtils.copyFileToDirectory(inputParam.originApk, dir);
         }
-        signedApk = new File(dir, finalApkName);
+        signedApk = new File(dir, apkName);
     }
 
     private void writeChannel() throws Exception {

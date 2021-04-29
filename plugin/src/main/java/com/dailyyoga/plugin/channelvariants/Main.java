@@ -7,8 +7,12 @@ import com.dailyyoga.plugin.channelvariants.apk.ResourceApkBuilder;
 import com.dailyyoga.plugin.channelvariants.util.FileOperation;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class Main {
+
+    static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
 
     public static void gradleRun(InputParam inputParam) {
         System.out.println(inputParam);
@@ -39,12 +43,27 @@ public class Main {
 
     private String generalApkName(File originApk, Channel originChannel, Channel channel) {
         String originApkName = originApk.getName();
-        originApkName = originApkName.replaceAll("(?i)" + originChannel.name, channel.name);
-        for (String key : channel.manifestPlaceholders.keySet()) {
-            String value = channel.manifestPlaceholders.get(key);
-            originApkName = originApkName.replaceAll(value, channel.manifestPlaceholders.get(key));
+        if (originChannel == null) {
+            //tencent_100004_release_8.10.0.0_20210427.apk
+            StringBuilder builder = new StringBuilder();
+            for (String key : channel.manifestPlaceholders.keySet()) {
+                builder.append("_")
+                        .append(channel.manifestPlaceholders.get(key));
+            }
+            builder.append("_")
+                    .append(dateFormat.format(new Date()))
+                    .append(".apk");
+            builder.deleteCharAt(builder.indexOf("_"));
+
+            return builder.toString();
+        } else {
+            originApkName = originApkName.replaceAll("(?i)" + originChannel.name, channel.name);
+            for (String key : channel.manifestPlaceholders.keySet()) {
+                String value = originChannel.manifestPlaceholders.get(key);
+                originApkName = originApkName.replaceAll(value, channel.manifestPlaceholders.get(key));
+            }
+            return originApkName;
         }
-        return originApkName;
     }
 
     private void deleteResourcesDir(ApkDecoder decoder) {
