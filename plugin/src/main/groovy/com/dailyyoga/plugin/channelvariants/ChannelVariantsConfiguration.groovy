@@ -2,8 +2,10 @@ package com.dailyyoga.plugin.channelvariants
 
 import com.android.builder.model.ProductFlavor
 import com.dailyyoga.plugin.channelvariants.apk.Channel
+import com.dailyyoga.plugin.channelvariants.util.Logger
 import com.google.common.collect.Lists
 import com.dailyyoga.plugin.channelvariants.ChannelVariantsExtension.ExcludeInclude
+import org.apache.http.util.TextUtils
 
 class ChannelVariantsConfiguration {
 
@@ -13,6 +15,11 @@ class ChannelVariantsConfiguration {
 
     ChannelVariantsConfiguration(ChannelVariantsExtension extension) {
         this.extension = extension
+    }
+
+
+    boolean available() {
+        return !TextUtils.isEmpty(originChannel) && !channelList.isEmpty()
     }
 
     static ChannelVariantsConfiguration create(ChannelVariantsExtension extension,
@@ -38,13 +45,30 @@ class ChannelVariantsConfiguration {
                 }
             }
         }
-        return configuration
+        return configuration.available() ? configuration : null
     }
 
-    static ChannelVariantsConfiguration create(ChannelVariantsExtension extension,
-                                               String filePath,
-                                               List<String> channels) {
+    static ChannelVariantsConfiguration createByFile(ChannelVariantsExtension extension,
+                                                     String filePath,
+                                                     List<String> channels) {
+        File apkFile = new File(filePath)
+        if (!apkFile.exists()) return null
 
+        ChannelVariantsConfiguration configuration = new ChannelVariantsConfiguration(extension)
+        configuration.originChannel = apkFile.name.substring(0, apkFile.name.indexOf("_"))
+
+        channels.each {
+            String[] arrays = it.split(":")
+            String name = arrays[0]
+            Map<String, Object> manifestPlaceholders = new HashMap<>()
+            manifestPlaceholders.put("CHANNEL_NAME", name)
+            manifestPlaceholders.put("CHANNEL_ID", arrays[1])
+
+            Channel channel = Channel.create(name, manifestPlaceholders)
+            configuration.channelList.add(channel)
+        }
+
+        return configuration.available() ? configuration : null
     }
 
     static Channel transform(ProductFlavor flavor) {

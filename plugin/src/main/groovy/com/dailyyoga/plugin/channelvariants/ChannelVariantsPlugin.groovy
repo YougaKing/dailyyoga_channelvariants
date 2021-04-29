@@ -44,13 +44,14 @@ class ChannelVariantsPlugin implements Plugin<Project> {
             return
         }
 
-        extension.fileMap.each { key, value ->
-            ChannelVariantsConfiguration configuration = ChannelVariantsConfiguration.create(extension, key, value)
-            if (configuration == null) return
-            createFileChannelVariantsTask(key, configuration)
-        }
-
         project.afterEvaluate {
+            Logger.error("extension${extension}")
+
+            extension.fileMap.each { key, value ->
+                ChannelVariantsConfiguration configuration = ChannelVariantsConfiguration.createByFile(extension, key, value)
+                if (configuration == null) return
+                createFileChannelVariantsTask(key, configuration)
+            }
 
             List<ProductFlavor> globalFlavors = Lists.newArrayList()
             android.productFlavors.all { ProductFlavor flavor ->
@@ -68,7 +69,7 @@ class ChannelVariantsPlugin implements Plugin<Project> {
 
     void createChannelVariantsTask(ApplicationVariant variant, ChannelVariantsConfiguration configuration) {
         def variantName = configuration.originChannel.capitalize()
-        def channelVariantsTaskName = "channelVariants${variantName}"
+        def channelVariantsTaskName = "channelVariants${variantName}" + variant.buildType.name
 
         Task channelVariantsTask = project.task(channelVariantsTaskName, type: ChannelVariantsTask) {
             setVariant(variant)
@@ -79,8 +80,10 @@ class ChannelVariantsPlugin implements Plugin<Project> {
     }
 
     void createFileChannelVariantsTask(String filePath, ChannelVariantsConfiguration configuration) {
+        def buildType = filePath.contains("_release") ? "Release" : "Debug"
+
         def variantName = configuration.originChannel.capitalize()
-        def channelVariantsTaskName = "channelVariants${variantName}"
+        def channelVariantsTaskName = "channelVariantsFile${variantName}" + buildType
 
         project.task(channelVariantsTaskName, type: FileChannelVariantsTask) {
             setFilePath(filePath)

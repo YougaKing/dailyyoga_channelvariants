@@ -10,7 +10,8 @@ channelVariants {
     andResGuard = false
     config("dailyYoga", "*|!vivo|!huawei*|!oppo|!xiaomi")
     config("huaWei", "huawei*")
-    configFile("/Users/youga/Downloads/baiDu_100003_release_8.10.0.0_20210427_signed.apk", "Lenovo:100021|LittleChannel:100039")
+    configFile("/Users/youga/StudioProjects/android_h2/dailyyoga/yoga_h2/build/outputs/apk/8.10.0.0/release/dailyYoga_100001_release_8.10.0.0_20210427.apk", "Lenovo:100021|LittleChannel:100039")
+    configFile("/Users/youga/StudioProjects/android_h2/dailyyoga/yoga_h2/build/outputs/apk/8.10.0.0/release/dailyYoga_100001_debug_8.10.0.0_20210427.apk", "Lenovo:100021|LittleChannel:100039")
 }
 
 android {

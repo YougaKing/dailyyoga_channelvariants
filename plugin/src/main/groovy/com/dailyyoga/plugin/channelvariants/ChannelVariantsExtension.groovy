@@ -52,11 +52,12 @@ class ChannelVariantsExtension {
                 ", logLevel=" + logLevel +
                 ", logDir=" + logDir +
                 ", andResGuard=" + andResGuard +
-                ", isFastMode=" + isFastMode +
-                ", channelMap=" + channelMap +
-                ", fileMap=" + fileMap +
+                ", \napkDir=" + apkDir +
+                ", \nchannelMap=" + channelMap +
+                ", \nfileMap=" + fileMap +
                 '}';
     }
+
 
     static class ExcludeInclude {
         boolean global
@@ -95,7 +96,7 @@ class ChannelVariantsExtension {
 
         @Override
         public String toString() {
-            return "ExcludeInclude{" +
+            return "\tExcludeInclude{" +
                     "global=" + global +
                     ", excludes=" + excludes +
                     ", includes=" + includes +
