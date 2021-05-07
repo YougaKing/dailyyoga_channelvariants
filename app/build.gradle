@@ -11,13 +11,13 @@ channelVariants {
     config("dailyYoga", "*|!vivo|!huawei*|!oppo|!xiaomi")
     config("huaWei", "huawei*")
 
-    Properties properties = signingConfigProperties()
-    signingConfig(
-            file(properties.getProperty('storeFile')),
-            properties.getProperty('storePassword'),
-            properties.getProperty('keyAlias'),
-            properties.getProperty('storePassword')
-    )
+//    Properties properties = signingConfigProperties()
+//    signingConfig(
+//            file(properties.getProperty('storeFile')),
+//            properties.getProperty('storePassword'),
+//            properties.getProperty('keyAlias'),
+//            properties.getProperty('storePassword')
+//    )
 
     config(
             file("/Users/youga/StudioProjects/android_h2/dailyyoga/yoga_h2/build/outputs/apk/8.10.0.0/release/tencent_100004_release_8.10.0.0_20210427_signed.apk"),
