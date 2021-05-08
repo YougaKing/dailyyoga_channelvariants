@@ -1,6 +1,6 @@
 package com.dailyyoga.plugin.channelvariants.apk;
 
-import com.dailyyoga.plugin.channelvariants.signer.ApkSignerTool;
+import com.android.apksigner.ApkSignerTool;
 import com.dailyyoga.plugin.channelvariants.manifest.ChannelEditor;
 import com.dailyyoga.plugin.channelvariants.manifest.decode.AXMLDoc;
 import com.dailyyoga.plugin.channelvariants.util.FileOperation;

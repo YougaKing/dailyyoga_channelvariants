@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.dailyyoga.plugin.channelvariants.signer;
+package com.android.apksigner;
 
 import java.util.Arrays;
 
@@ -105,12 +105,14 @@ class OptionsParser {
         }
         if (mIndex >= mParams.length) {
             // No more parameters left
-            throw new OptionsException(valueDescription + " missing after " + mLastOptionOriginalForm);
+            throw new OptionsException(
+                    valueDescription + " missing after " + mLastOptionOriginalForm);
         }
         String param = mParams[mIndex];
         if ("--".equals(param)) {
             // End of options marker
-            throw new OptionsException(valueDescription + " missing after " + mLastOptionOriginalForm);
+            throw new OptionsException(
+                    valueDescription + " missing after " + mLastOptionOriginalForm);
         }
         mIndex++;
         return param;
@@ -125,11 +127,9 @@ class OptionsParser {
         try {
             return Integer.parseInt(value);
         } catch (NumberFormatException e) {
-            throw new OptionsException(valueDescription
-                    + " ("
-                    + mLastOptionOriginalForm
-                    + ") must be a decimal number: "
-                    + value);
+            throw new OptionsException(
+                    valueDescription + " (" + mLastOptionOriginalForm
+                            + ") must be a decimal number: " + value);
         }
     }
 
@@ -147,11 +147,9 @@ class OptionsParser {
             } else if ("false".equals(stringValue)) {
                 return false;
             }
-            throw new OptionsException("Unsupported value for "
-                    + mLastOptionOriginalForm
-                    + ": "
-                    + stringValue
-                    + ". Only true or false supported.");
+            throw new OptionsException(
+                    "Unsupported value for " + mLastOptionOriginalForm + ": " + stringValue
+                            + ". Only true or false supported.");
         }
 
         // --option (true|false) form OR just --option

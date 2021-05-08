@@ -37,7 +37,7 @@ public class Main {
         for (Channel channel : inputParam.channelList) {
             String apkName = generalApkName(inputParam.originApk, inputParam.originChannel, channel);
             ResourceApkBuilder builder = new ResourceApkBuilder(inputParam, channel, apkName, decoder);
-            builder.buildApkWithV2sign(decoder.getCompressData(), 14);
+            builder.buildApkWithV2sign(decoder.getCompressData(), 19);
         }
     }
 

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.dailyyoga.plugin.channelvariants.signer;
+package com.android.apksigner;
 
 import java.nio.ByteBuffer;
 
@@ -23,13 +23,10 @@ import java.nio.ByteBuffer;
  */
 class HexEncoding {
 
-    private static final char[] HEX_DIGITS = "0123456789abcdef".toCharArray();
+    /** Hidden constructor to prevent instantiation. */
+    private HexEncoding() {}
 
-    /**
-     * Hidden constructor to prevent instantiation.
-     */
-    private HexEncoding() {
-    }
+    private static final char[] HEX_DIGITS = "0123456789abcdef".toCharArray();
 
     /**
      * Encodes the provided data as a hexadecimal string.
