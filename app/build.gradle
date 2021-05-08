@@ -11,13 +11,13 @@ channelVariants {
     config("dailyYoga", "*|!vivo|!huawei*|!oppo|!xiaomi")
     config("huaWei", "huawei*")
 
-    Properties properties = signingConfigProperties()
-    signingConfig(
-            file(properties.getProperty('storeFile')),
-            properties.getProperty('storePassword'),
-            properties.getProperty('keyAlias'),
-            properties.getProperty('storePassword')
-    )
+//    Properties properties = signingConfigProperties()
+//    signingConfig(
+//            file(properties.getProperty('storeFile')),
+//            properties.getProperty('storePassword'),
+//            properties.getProperty('keyAlias'),
+//            properties.getProperty('storePassword')
+//    )
 
     config(
             file("/Users/youga/Downloads/huaWei_100020_release_8.10.0.0_20210506.apk"),
