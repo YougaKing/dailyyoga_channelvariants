@@ -6,8 +6,6 @@ import com.dailyyoga.plugin.channelvariants.apk.InputParam;
 import com.dailyyoga.plugin.channelvariants.apk.ResourceApkBuilder;
 import com.dailyyoga.plugin.channelvariants.util.FileOperation;
 
-import org.gradle.internal.impldep.org.apache.http.util.TextUtils;
-
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -62,7 +60,7 @@ public class Main {
             originApkName = originApkName.replaceAll("(?i)" + originChannel.name, channel.name);
             for (String key : channel.manifestPlaceholders.keySet()) {
                 String value = originChannel.manifestPlaceholders.get(key);
-                if (TextUtils.isEmpty(value)) continue;
+                if (value == null) continue;
                 originApkName = originApkName.replaceAll(value, channel.manifestPlaceholders.get(key));
             }
             return originApkName;
