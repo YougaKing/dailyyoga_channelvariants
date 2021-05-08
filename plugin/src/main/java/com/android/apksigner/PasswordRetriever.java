@@ -80,15 +80,15 @@ class PasswordRetriever implements AutoCloseable {
      * the passwords are read from the file one line at a time.
      *
      * @param additionalPwdEncodings additional encodings for converting the password into KeyStore
-     *        or PKCS #8 encrypted key password. These encoding are used in addition to using the
-     *        password verbatim or encoded using JVM default character encoding. A useful encoding
-     *        to provide is the console character encoding on Windows machines where the console
-     *        may be different from the JVM default encoding. Unfortunately, there is no public API
-     *        to obtain the console's character encoding.
+     *                               or PKCS #8 encrypted key password. These encoding are used in addition to using the
+     *                               password verbatim or encoded using JVM default character encoding. A useful encoding
+     *                               to provide is the console character encoding on Windows machines where the console
+     *                               may be different from the JVM default encoding. Unfortunately, there is no public API
+     *                               to obtain the console's character encoding.
      */
     public List<char[]> getPasswords(
             String spec, String description, Charset... additionalPwdEncodings)
-                    throws IOException {
+            throws IOException {
         // IMPLEMENTATION NOTE: Java KeyStore and PBEKeySpec APIs take passwords as arrays of
         // Unicode characters (char[]). Unfortunately, it appears that Sun/Oracle keytool and
         // jarsigner in some cases use passwords which are the encoded form obtained using the
@@ -217,7 +217,8 @@ class PasswordRetriever implements AutoCloseable {
         try {
             char[] pwd = decodePassword(encodedPwd, encodingForDecoding);
             addPasswords(passwords, pwd, additionalEncodings);
-        } catch (IOException ignored) {}
+        } catch (IOException ignored) {
+        }
 
         // Add the original encoded form
         addPassword(passwords, castBytesToChars(encodedPwd));
@@ -237,7 +238,8 @@ class PasswordRetriever implements AutoCloseable {
                 try {
                     char[] encodedPwd = castBytesToChars(encodePassword(pwd, encoding));
                     addPassword(passwords, encodedPwd);
-                } catch (IOException ignored) {}
+                } catch (IOException ignored) {
+                }
             }
         }
 
@@ -249,14 +251,16 @@ class PasswordRetriever implements AutoCloseable {
             try {
                 char[] encodedPwd = castBytesToChars(encodePassword(pwd, mConsoleEncoding));
                 addPassword(passwords, encodedPwd);
-            } catch (IOException ignored) {}
+            } catch (IOException ignored) {
+            }
         }
 
         // Password encoded using the JVM default character encoding and upcast into char[]
         try {
             char[] encodedPwd = castBytesToChars(encodePassword(pwd, Charset.defaultCharset()));
             addPassword(passwords, encodedPwd);
-        } catch (IOException ignored) {}
+        } catch (IOException ignored) {
+        }
     }
 
     /**
@@ -275,9 +279,9 @@ class PasswordRetriever implements AutoCloseable {
     private static byte[] encodePassword(char[] pwd, Charset cs) throws IOException {
         ByteBuffer pwdBytes =
                 cs.newEncoder()
-                .onMalformedInput(CodingErrorAction.REPLACE)
-                .onUnmappableCharacter(CodingErrorAction.REPLACE)
-                .encode(CharBuffer.wrap(pwd));
+                        .onMalformedInput(CodingErrorAction.REPLACE)
+                        .onUnmappableCharacter(CodingErrorAction.REPLACE)
+                        .encode(CharBuffer.wrap(pwd));
         byte[] encoded = new byte[pwdBytes.remaining()];
         pwdBytes.get(encoded);
         return encoded;
@@ -286,9 +290,9 @@ class PasswordRetriever implements AutoCloseable {
     private static char[] decodePassword(byte[] pwdBytes, Charset encoding) throws IOException {
         CharBuffer pwdChars =
                 encoding.newDecoder()
-                .onMalformedInput(CodingErrorAction.REPLACE)
-                .onUnmappableCharacter(CodingErrorAction.REPLACE)
-                .decode(ByteBuffer.wrap(pwdBytes));
+                        .onMalformedInput(CodingErrorAction.REPLACE)
+                        .onUnmappableCharacter(CodingErrorAction.REPLACE)
+                        .decode(ByteBuffer.wrap(pwdBytes));
         char[] result = new char[pwdChars.remaining()];
         pwdChars.get(result);
         return result;
@@ -398,7 +402,8 @@ class PasswordRetriever implements AutoCloseable {
         for (InputStream in : mFileInputStreams.values()) {
             try {
                 in.close();
-            } catch (IOException ignored) {}
+            } catch (IOException ignored) {
+            }
         }
         mFileInputStreams.clear();
         mClosed = true;

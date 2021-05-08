@@ -19,6 +19,7 @@ package com.android.apksigner;
 import com.android.apksig.ApkSigner;
 import com.android.apksig.ApkVerifier;
 import com.android.apksig.apk.MinSdkVersionException;
+
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -58,6 +59,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.List;
+
 import javax.crypto.EncryptedPrivateKeyInfo;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
@@ -296,10 +298,12 @@ public class ApkSignerTool {
                     throw new RuntimeException(
                             "Neither KeyStore key alias nor private key file available");
                 }
+                System.out.println("v1SigBasename:" + v1SigBasename);
+                System.out.println("signer:" + signer);
                 ApkSigner.SignerConfig signerConfig =
                         new ApkSigner.SignerConfig.Builder(
                                 v1SigBasename, signer.privateKey, signer.certs)
-                        .build();
+                                .build();
                 signerConfigs.add(signerConfig);
             }
         }
@@ -496,7 +500,7 @@ public class ApkSignerTool {
                         System.out.println(
                                 "Signer #" + signerNumber + " key size (bits): "
                                         + ((keySize != -1)
-                                                ? String.valueOf(keySize) : "n/a"));
+                                        ? String.valueOf(keySize) : "n/a"));
                         byte[] encodedKey = publicKey.getEncoded();
                         System.out.println(
                                 "Signer #" + signerNumber + " public key SHA-256 digest: "
@@ -519,7 +523,7 @@ public class ApkSignerTool {
         }
 
         @SuppressWarnings("resource") // false positive -- this resource is not opened here
-        PrintStream warningsOut = (warningsTreatedAsErrors) ? System.err : System.out;
+                PrintStream warningsOut = (warningsTreatedAsErrors) ? System.err : System.out;
         for (ApkVerifier.IssueWithParams warning : result.getWarnings()) {
             warningsEncountered = true;
             warningsOut.println("WARNING: " + warning);
@@ -559,10 +563,10 @@ public class ApkSignerTool {
 
     private static void printUsage(String page) {
         try (BufferedReader in =
-                new BufferedReader(
-                        new InputStreamReader(
-                                ApkSignerTool.class.getResourceAsStream(page),
-                                StandardCharsets.UTF_8))) {
+                     new BufferedReader(
+                             new InputStreamReader(
+                                     ApkSignerTool.class.getResourceAsStream(page),
+                                     StandardCharsets.UTF_8))) {
             String line;
             while ((line = in.readLine()) != null) {
                 System.out.println(line);
@@ -711,10 +715,10 @@ public class ApkSignerTool {
             {
                 String keystorePasswordSpec =
                         (this.keystorePasswordSpec != null)
-                                ?  this.keystorePasswordSpec : PasswordRetriever.SPEC_STDIN;
+                                ? this.keystorePasswordSpec : PasswordRetriever.SPEC_STDIN;
                 additionalPasswordEncodings =
                         (passwordCharset != null)
-                                ? new Charset[] {passwordCharset} : new Charset[0];
+                                ? new Charset[]{passwordCharset} : new Charset[0];
                 keystorePasswords =
                         passwordRetriever.getPasswords(
                                 keystorePasswordSpec,
@@ -742,8 +746,8 @@ public class ApkSignerTool {
                                 if (keystoreKeyAlias != null) {
                                     throw new ParameterException(
                                             keystoreFile + " contains multiple key entries"
-                                            + ". --ks-key-alias option must be used to specify"
-                                            + " which entry to use.");
+                                                    + ". --ks-key-alias option must be used to specify"
+                                                    + " which entry to use.");
                                 }
                                 keystoreKeyAlias = keyAlias;
                             }
@@ -821,7 +825,7 @@ public class ApkSignerTool {
          * Loads the password-protected keystore from storage.
          *
          * @param file file backing the keystore or {@code null} if the keystore is not file-backed,
-         *        for example, a PKCS #11 KeyStore.
+         *             for example, a PKCS #11 KeyStore.
          */
         private static void loadKeyStoreFromFile(KeyStore ks, String file, List<char[]> passwords)
                 throws Exception {
@@ -885,7 +889,7 @@ public class ApkSignerTool {
                         (keyPasswordSpec != null) ? keyPasswordSpec : PasswordRetriever.SPEC_STDIN;
                 Charset[] additionalPasswordEncodings =
                         (passwordCharset != null)
-                                ? new Charset[] {passwordCharset} : new Charset[0];
+                                ? new Charset[]{passwordCharset} : new Charset[0];
                 List<char[]> keyPasswords =
                         passwordRetriver.getPasswords(
                                 passwordSpec,
@@ -967,6 +971,8 @@ public class ApkSignerTool {
             }
             throw new InvalidKeySpecException("Not an RSA, EC, or DSA private key");
         }
+
+
     }
 
     private static byte[] readFully(File file) throws IOException {
